@@ -1,17 +1,12 @@
 {
-  "name": "instant-site-search",
+  "name": "@algolia/sitesearch-root",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "bun --filter @algolia/sidepanel-react --filter @algolia/sitesearch-react --filter demo dev",
-    "build:react": "bun --filter @algolia/sitesearch-react build && bun --filter @algolia/sidepanel-react build",
-    "build:js-bundle": "bun --filter @algolia/sitesearch-react build && bun --filter @algolia/sitesearch-js build",
-    "build": "bun run build:react && bun run --filter demo build && bun run --filter docs build",
-    "dev:demo": "bun --filter demo dev",
-    "dev:docs": "bun --filter docs dev",
-    "dev:sidepanel": "bun --filter @algolia/sidepanel-react dev",
-    "deploy": "bunx gh-pages -d apps/demo/dist"
+    "dev": "bun --filter @algolia/registry dev",
+    "build": "bun --filter @algolia/registry registry:build && bun --filter @algolia/registry build",
+    "build:js": "bun --filter @algolia/sitesearch-js build"
   },
   "keywords": [],
   "author": "",

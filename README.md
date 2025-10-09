@@ -2,7 +2,7 @@
 
 🫆 Opinionated InstantSearch experience for your Site search needs, powered by Algolia's [Instant Search](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/js/) and [AskAI](https://www.algolia.com/products/ai/ask-ai)
 
-[![CodeSandbox](https://img.shields.io/badge/CodeSandbox-Edit-blue?style=flat-square&logo=codesandbox)](https://codesandbox.io/p/github/algolia/sitesearch)
+[![CodeSandbox](https://img.shields.io/badge/Codesandbox-040404?style=for-the-badge&logo=codesandbox&logoColor=DBDBDB)](https://codesandbox.io/p/github/algolia/sitesearch)
 
 ## Overview
 
@@ -110,7 +110,7 @@ All components use CSS custom properties for easy theming:
 
 ### Copy Component Code
 
-1. Go to [StackBlitz](https://stackblitz.com/~/github.com/algolia/sitesearch)
+1. Go to [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch)
 2. Navigate to `src/experiences/`
 3. Copy the component files you need
 4. Paste into your project
@@ -223,7 +223,7 @@ function CustomSearch() {
 
 1. Fork the repository
 2. Add your component to `/src/experiences/`
-3. Update the StackBlitz examples
+3. Update the CodeSandBox examples
 4. Submit a PR
 
 ## License

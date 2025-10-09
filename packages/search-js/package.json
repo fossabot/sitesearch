@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rolldown -c",
+    "build": "bunx rolldown -c",
     "clean": "rm -rf dist"
   },
   "keywords": [
@@ -28,7 +28,7 @@
     "postcss": "^8.4.49",
     "autoprefixer": "^10.4.20",
     "preact": "^10.24.3",
-    "@algolia/sitesearch-react": "workspace:*",
+    "@algolia/registry": "workspace:*",
     "cssnano": "^7.0.6",
     "@types/node": "^22.12.9",
     "typescript": "^5.7.2"

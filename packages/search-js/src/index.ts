@@ -1,6 +1,6 @@
-import { SearchWithAskAI } from "@algolia/sitesearch-react/search-w-askai/icons";
+import { SearchWithAskAI } from "@algolia/registry";
 import { render } from "preact";
-import "@algolia/sitesearch-react/dist/sitesearch.css";
+import "@algolia/registry/dist/sitesearch.css";
 import type { SiteSearchInitOptions } from "./types";
 
 // Global API for vanilla JS usage
