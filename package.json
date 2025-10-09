@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "bun --filter @algolia/registry dev",
     "build": "bun --filter @algolia/registry registry:build && bun --filter @algolia/registry build",
-    "build:js": "bun --filter @algolia/sitesearch-js build"
+    "build:js": "bun --filter @algolia/sitesearch-js build",
+    "build:docs": "bun build && bun --filter docs build"
   },
   "keywords": [],
   "author": "",
