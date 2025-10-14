@@ -14,8 +14,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Algolia Sitesearch Registry",
-  description: "Algolia Site search Registry",
+  title: "SiteSearch Registry | Algolia",
+  description:
+    "🫆 Opinionated InstantSearch experience for your Site search needs, powered by Algolia's Instant Search and AskAI",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_APP_URL!,
+    title: "SiteSearch Registry | Algolia",
+    description:
+      "🫆 Opinionated InstantSearch experience for your Site search needs, powered by Algolia's Instant Search and AskAI",
+    siteName: "SiteSearch Registry | Algolia",
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_APP_URL}/open-graph.png`,
+        width: 1200,
+        height: 630,
+        alt: "SiteSearch Registry | Algolia",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
