@@ -21,7 +21,7 @@ import { SearchInput } from "@/registry/experiences/search-askai/components/sear
 import { useAskai } from "@/registry/experiences/search-askai/hooks/askai";
 import { useKeyboardNavigation } from "@/registry/experiences/search-askai/hooks/useKeyboardNavigation";
 import { useSearchState } from "@/registry/experiences/search-askai/hooks/useSearchState";
-import "@/registry/experiences/search-askai/components/styles.css";
+import "./styles.css";
 import { SearchButton } from "@/registry/experiences/search-askai/components/search-button";
 import { Modal } from "@/registry/experiences/search-askai/components/search-modal";
 import { useEffectiveDarkMode } from "@/registry/experiences/search-askai/hooks/useEffectiveDarkMode";

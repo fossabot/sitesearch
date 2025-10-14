@@ -16,7 +16,7 @@ import {
 import { SearchInput } from "@/registry/experiences/search/components/search-input";
 import { useKeyboardNavigation } from "@/registry/experiences/search/hooks/useKeyboardNavigation";
 
-import "@/registry/experiences/search/components/styles.css";
+import "./styles.css";
 import { SearchButton } from "@/registry/experiences/search/components/search-button";
 import { Modal } from "@/registry/experiences/search/components/search-modal";
 import useEffectiveDarkMode from "@/registry/experiences/search/hooks/useEffectiveDarkMode";
