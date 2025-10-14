@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { CopyCodeButton } from "@/components/copy-code-button";
 import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Search from "@/registry/experiences/search/components";
@@ -8,7 +9,7 @@ import SearchAskAI from "@/registry/experiences/search-askai/components";
 
 export default function Home() {
   return (
-    <div className="max-w-3xl mx-auto flex flex-col min-h-svh px-4 py-8 gap-8">
+    <div className="max-w-5xl mx-auto flex flex-col min-h-screen px-4 py-8 gap-8">
       <header className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -29,15 +30,15 @@ export default function Home() {
           <ThemeToggle />
         </div>
       </header>
-      <main className="flex flex-col flex-1 gap-8">
-        <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[100px] md:min-h-[450px] relative">
+      <main className="gap-8 grid grid-cols-1 md:grid-cols-2 flex-1">
+        <div className="flex flex-col gap-4 border rounded-lg p-4 h-[100px] md:h-[320px] relative">
           <div className="flex items-center justify-between">
             <h2 className="text-sm text-muted-foreground sm:pl-3">
-              Search with AskAI
+              Search <b className="font-bold"> with Ask AI</b>
             </h2>
             <OpenInV0Button name="search-ai" className="w-fit" />
           </div>
-          <div className="flex items-center justify-center min-h-[100px] md:min-h-[400px] relative">
+          <div className="flex items-center justify-center h-[100px] md:h-[300px] relative">
             <SearchAskAI
               applicationId="betaHAXPMHIMMC"
               apiKey="8b00405cba281a7d800ccec393e9af24"
@@ -46,17 +47,29 @@ export default function Home() {
               assistantId="Y89iGlsnihaU"
             />
           </div>
+          <div className="flex">
+            <CopyCodeButton
+              title="npm install command"
+              code="npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search-ai.json"
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 border rounded-lg p-4 min-h-[100px] md:min-h-[450px] relative">
+        <div className="flex flex-col gap-4 border rounded-lg p-4 h-[100px] md:h-[320px] relative">
           <div className="flex items-center justify-between">
             <h2 className="text-sm text-muted-foreground sm:pl-3">Search</h2>
             <OpenInV0Button name="search" className="w-fit" />
           </div>
-          <div className="flex items-center justify-center min-h-[100px] md:min-h-[400px] relative">
+          <div className="flex items-center justify-center h-[100px] md:h-[300px] relative">
             <Search
               applicationId="betaHAXPMHIMMC"
               apiKey="8b00405cba281a7d800ccec393e9af24"
               indexName="algolia_podcast_sample_dataset"
+            />
+          </div>
+          <div className="flex">
+            <CopyCodeButton
+              title="npm install command"
+              code="npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search.json"
             />
           </div>
         </div>
