@@ -9,11 +9,13 @@
       "type": "registry:block",
       "title": "Algolia crafted search experience",
       "description": "Opinionated site search experience, powered by Algolia's InstantSearch",
+      "registryDependencies": ["button"],
       "dependencies": [
         "algoliasearch@^5",
         "react-instantsearch@^7.16.2",
-        "tw-animate-css"
+        "lucide-react"
       ],
+      "devDependencies": ["tw-animate-css"],
       "css": {
         "@plugin \"tw-animate-css\"": {},
 
@@ -22,10 +24,6 @@
       "files": [
         {
           "path": "src/registry/experiences/search/components/search.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/registry/experiences/common/search-button.tsx",
           "type": "registry:component"
         },
         {
@@ -43,13 +41,16 @@
       "name": "search-ai",
       "type": "registry:block",
       "title": "Search with Ask AI",
+      "registryDependencies": ["button"],
+      "devDependencies": ["tw-animate-css"],
       "description": "Opinionated search experience with Ask AI, powered by Algolia's InstantSearch and Ask AI",
       "dependencies": [
         "@ai-sdk/react@^2.0.4",
         "ai@^5.0.30",
         "algoliasearch@^5",
         "react-instantsearch@^7.16.2",
-        "tw-animate-css"
+        "tw-animate-css",
+        "lucide-react"
       ],
       "css": {
         "@plugin \"tw-animate-css\"": {},
@@ -69,10 +70,6 @@
       "files": [
         {
           "path": "src/registry/experiences/search-askai/components/search-ai.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/registry/experiences/common/search-button.tsx",
           "type": "registry:component"
         },
         {

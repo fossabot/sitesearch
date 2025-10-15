@@ -27,8 +27,7 @@ export default function HomePage() {
       <div className="mx-auto max-w-7xl px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-4xl py-24 sm:py-32 lg:py-40">
           <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-balance text-gray-900 sm:text-6xl lg:text-7xl dark:text-white font-sora">
-              Your{" "}
+            <h1 className="text-3xl font-bold tracking-tight text-balance text-gray-900 sm:text-4xl lg:text-6xl dark:text-white font-sora">
               <WordRotate
                 className="text-[#003dff] dark:text-indigo-400"
                 words={[
@@ -49,10 +48,9 @@ export default function HomePage() {
             <p className="mt-6 text-lg leading-8 text-gray-600 font-sora dark:text-gray-400 max-w-2xl mx-auto">
               The ultimate{" "}
               <span className="font-semibold text-gray-900 dark:text-white">
-                search experience resource
+                search experience resource.
               </span>{" "}
-              for React developers. Essential UI components, advanced patterns,
-              and{" "}
+              Essential UI components, advanced patterns, and{" "}
               <span className="font-semibold text-gray-900 dark:text-white">
                 AI integrations
               </span>

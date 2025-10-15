@@ -19,7 +19,6 @@ import {
   useSearchBox,
 } from "react-instantsearch";
 import { Button } from "@/components/ui/button";
-import { SearchButton } from "@/registry/experiences/common/search-button";
 import { useKeyboardNavigation } from "@/registry/experiences/search/hooks/use-keyboard-navigation";
 
 export interface SearchConfig {
@@ -44,6 +43,31 @@ export interface SearchConfig {
 // ============================================================================
 // Internal Components
 // ============================================================================
+
+interface SearchButtonProps {
+  onClick: () => void;
+  children?: React.ReactNode;
+}
+
+export const SearchButton: React.FC<SearchButtonProps> = ({ onClick }) => {
+  return (
+    <Button
+      type="button"
+      onClick={onClick}
+      variant="outline"
+      className="md:min-w-[200px] justify-between hover:shadow-md transition-transform duration-400 translate-y-0 py-3 h-auto cursor-pointer hover:bg-transparent hover:translate-y-[-2px] border shadow-none"
+      aria-label="Open search"
+    >
+      <span className="flex items-center gap-2 opacity-80">
+        <SearchIcon size={24} color="currentColor" />
+        <span className="hidden sm:inline text-muted-foreground">Search</span>
+      </span>
+      <div className="hidden md:inline-block rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+        ⌘ K
+      </div>
+    </Button>
+  );
+};
 
 // Logo Component
 const AlgoliaLogo = ({ size = 150 }: { size?: number | string }) => (
