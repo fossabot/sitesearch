@@ -16,14 +16,9 @@ export default function HomePage() {
           className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 dark:from-indigo-500 dark:to-sky-500 dark:opacity-20 sm:left-[calc(50%-30rem)] sm:w-288.75"
         />
       </div>
-      <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-        <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-          <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-400 dark:ring-white/10 dark:hover:ring-white/20">
-            ⚠️ WIP
-          </div>
-        </div>
+      <div className="mx-auto max-w-4xl py-32 sm:py-48 lg:py-56">
         <div className="text-center">
-          <h1 className="text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-5xl dark:text-white">
+          <h1 className="text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl dark:text-white">
             <WordRotate
               className="text-[#003dff] dark:text-indigo-300"
               words={[

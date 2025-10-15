@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "bun --filter @algolia/registry dev",
-    "dev:docs": "bun --filter docs dev",
-    "build": "bun --filter @algolia/registry registry:build && bun --filter @algolia/registry build",
-    "build:js": "bun --filter @algolia/sitesearch-js build",
+    "dev": "bun --filter docs dev",
+    "build:js": "bun --filter search-js build",
     "build:docs": "bun --filter docs build"
   },
   "keywords": [],

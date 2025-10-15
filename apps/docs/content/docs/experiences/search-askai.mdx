@@ -1,24 +1,25 @@
 ---
-title: Search with AskAI
-description: "The opinionated search + AskAI experience built. Built like DocSearch but with InstantSearch and AskAI."
+title: Search with Ask AI
+description: "The opinionated search + Ask AI experience built. Built like DocSearch but with Algolia InstantSearch and Ask AI."
 ---
 
-Combine precise retrieval with AI summarization. `Search + AskAI` keeps traditional hits in view while letting users ask follow-up questions powered by Algolia’s AI.
+Combine precise retrieval with conversational AI search. `Search + AskAI` keeps traditional hits in view while letting users ask follow-up questions powered by [Algolia’s Ask AI](https://www.algolia.com/products/ai/ask-ai).
 
 ## Use cases
 
-- Product or content search with ranking tuned in Algolia
 - AI-powered chat for complex queries
 - Conversational search
 - Keyboard-friendly, accessible navigation
+- Hybrid search with traditional hits and AI-powered follow-ups
 
 ## Preview
 
+<PreviewSiteSearch />
 
 ## Usage
 
 ```tsx
-npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search-ai.json
+npx shadcn@latest add https://sitesearch.algolia.com/r/search-ai.json
 ```
 
 This will add the `Search with AskAI` experience to your project under `components/search-ai`. Use it like this:
@@ -30,7 +31,7 @@ import { default as SearchWithAskAi } from "@/components/search-ai";
   applicationId="betaHAXPMHIMMC"
   apiKey="8b00405cba281a7d800ccec393e9af24"
   indexName="algolia_podcast_sample_dataset"
-  assistantId="Z03Eno3oLaXI"
+  assistantId="Y89iGlsnihaU"
   placeholder="Search for podcasts..."
   hitsPerPage={15}
   keyboardShortcut="cmd+k"
@@ -38,3 +39,16 @@ import { default as SearchWithAskAi } from "@/components/search-ai";
 />
 ```
 
+## Configuration
+
+Prerequisites for using the `SearchWithAskAi` component:
+
+- `applicationId`: The Algolia application ID
+- `apiKey`: The Algolia API key
+- `indexName`: The Algolia index name
+- `assistantId`: The Ask AI assistant ID
+
+## Extending further
+
+- Change the styling to match your brand
+- Open in v0 for more customization

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "algolia",
+  "homepage": "https://algolia.com",
+  "items": [
+    {
+      "name": "search",
+      "type": "registry:block",
+      "title": "Algolia crafted search experience",
+      "description": "Algolia opinionated site search experience",
+      "dependencies": [
+        "algoliasearch@^5",
+        "react-instantsearch@^7.16.2",
+        "tw-animate-css"
+      ],
+      "css": {
+        "@plugin \"tw-animate-css\"": {},
+
+        "input[type=\"search\"]::-webkit-search-decoration,input[type=\"search\"]::-webkit-search-cancel-button,input[type=\"search\"]::-webkit-search-results-button,input[type=\"search\"]::-webkit-search-results-decoration": "-webkit-appearance: none;"
+      },
+      "files": [
+        {
+          "path": "src/registry/experiences/search/components/search.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/common/search-button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/search/hooks/use-keyboard-navigation.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/search/page.tsx",
+          "type": "registry:page",
+          "target": "app/search/page.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-ai",
+      "type": "registry:block",
+      "title": "Search with Ask AI",
+      "description": "Algolia opinionated search experience with Ask AI",
+      "dependencies": [
+        "@ai-sdk/react@^2.0.4",
+        "ai@^5.0.30",
+        "algoliasearch@^5",
+        "react-instantsearch@^7.16.2",
+        "tw-animate-css"
+      ],
+      "css": {
+        "@plugin \"tw-animate-css\"": {},
+
+        "input[type=\"search\"]::-webkit-search-decoration,input[type=\"search\"]::-webkit-search-cancel-button,input[type=\"search\"]::-webkit-search-results-button,input[type=\"search\"]::-webkit-search-results-decoration": "-webkit-appearance: none;",
+
+        "@keyframes shiny-text": {
+          "0%,90%,100%": "{\nbackground-position: calc(-100% - var(--shiny-width)) 0;\n}",
+          "30%,60%": "{\nbackground-position: calc(100% + var(--shiny-width)) 0;\n}"
+        }
+      },
+      "cssVars": {
+        "theme": {
+          "animate-shiny-text": "shiny-text 8s infinite"
+        }
+      },
+      "files": [
+        {
+          "path": "src/registry/experiences/search-askai/components/search-ai.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/common/search-button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/experiences/search-askai/hooks/use-keyboard-navigation.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/search-askai/hooks/use-search-state.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/search-askai/hooks/use-askai.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/registry/experiences/search-askai/page.tsx",
+          "type": "registry:page",
+          "target": "app/search-ai/page.tsx"
+        }
+      ]
+    }
+  ]
+}

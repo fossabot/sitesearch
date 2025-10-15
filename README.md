@@ -31,13 +31,13 @@ SiteSearch provides production-ready search components that combine Algolia's li
 Install sitesearch components from our public repository
 
 ```bash
-npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search.json
+npx shadcn@latest add https://sitesearch.algolia.com/r/search.json
 ```
 
 or
 
 ```bash
-npx shadcn@latest add https://algolia-sitesearch.netlify.app/r/search-ai.json
+npx shadcn@latest add https://sitesearch.algolia.com/r/search-ai.json
 ```
 
 ### Manual
