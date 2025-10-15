@@ -54,8 +54,6 @@ export function useAskai(config: AskAIConfig) {
   const isGenerating =
     chat.status === "submitted" || chat.status === "streaming";
 
-  console.log(chat);
-
   return {
     ...chat,
     isGenerating,

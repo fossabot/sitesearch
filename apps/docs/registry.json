@@ -1,13 +1,14 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "algolia",
+  "description": "Algolia opinionated site search experience",
   "homepage": "https://algolia.com",
   "items": [
     {
       "name": "search",
       "type": "registry:block",
       "title": "Algolia crafted search experience",
-      "description": "Algolia opinionated site search experience",
+      "description": "Opinionated site search experience, powered by Algolia's InstantSearch",
       "dependencies": [
         "algoliasearch@^5",
         "react-instantsearch@^7.16.2",
@@ -42,7 +43,7 @@
       "name": "search-ai",
       "type": "registry:block",
       "title": "Search with Ask AI",
-      "description": "Algolia opinionated search experience with Ask AI",
+      "description": "Opinionated search experience with Ask AI, powered by Algolia's InstantSearch and Ask AI",
       "dependencies": [
         "@ai-sdk/react@^2.0.4",
         "ai@^5.0.30",
