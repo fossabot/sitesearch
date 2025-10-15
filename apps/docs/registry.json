@@ -35,7 +35,8 @@
           "type": "registry:page",
           "target": "app/search/page.tsx"
         }
-      ]
+      ],
+      "categories": ["search"]
     },
     {
       "name": "search-ai",
@@ -89,7 +90,8 @@
           "type": "registry:page",
           "target": "app/search-ai/page.tsx"
         }
-      ]
+      ],
+      "categories": ["search", "ai"]
     }
   ]
 }
