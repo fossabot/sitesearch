@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Algolia SiteSearch Vanilla Demo</title>
+  <link rel="stylesheet" href="./node_modules/@algolia/sitesearch/dist/search.min.css" />
+  <link rel="stylesheet" href="./node_modules/@algolia/sitesearch/dist/search-askai.min.css" />
+  <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Algolia SiteSearch (Vanilla)</h1>
+        <p>Customize, edit, and export your search components</p>
+      </div>
+
+      <div class="layout">
+        <div class="left-col">
+          <div class="card">
+            <h2>Search Only</h2>
+            <div class="demo-container">
+              <div id="search"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Search + Ask AI</h2>
+            <div class="demo-container">
+              <div id="askai"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-col">
+          <div class="card doc-card">
+            <h2>Guide</h2>
+            <div class="doc">
+              <ol class="doc-steps">
+                <li>
+                  <h3>Iterate on the components</h3>
+                  <p>Edit in <code>packages/standalone/src/components/search/*</code> or <code>packages/standalone/src/components/search-askai/*</code></p>
+                </li>
+                <li>
+                  <h3>View your changes here</h3>
+                  <p>Use the demos on the left (Search Only, Search + Ask AI).</p>
+                </li>
+                <li>
+                  <h3>Build the bundle</h3>
+                  <pre><code>bun run bundle:zip</code></pre>
+                </li>
+                <li>
+                  <h3>Download output</h3>
+                  <pre><code>packages/standalone/dist/sitesearch-bundles.zip</code></pre>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Built with 💙 by Algolia • <a href="https://sitesearch.algolia.com/" target="_blank">Documentation</a></p>
+      </div>
+    </div>
+
+    <script src="./node_modules/@algolia/sitesearch/dist/search.min.js"></script>
+    <script src="./node_modules/@algolia/sitesearch/dist/search-askai.min.js"></script>
+    <script src="./main.js"></script>
+  </body>
+  </html>

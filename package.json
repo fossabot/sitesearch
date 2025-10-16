@@ -1,12 +1,14 @@
 {
-  "name": "@algolia/sitesearch-root",
+  "name": "root",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "bun --filter docs dev",
-    "build:js": "bun --filter search-js build",
-    "build:docs": "bun --filter docs build"
+    "build:docs": "bun --filter docs build",
+    "bundle": "bun --filter @algolia/sitesearch run build",
+    "bundle:zip": "bun --filter @algolia/sitesearch build && cd packages/standalone/dist && zip -r sitesearch-bundles.zip search*.{min.js,min.css} search-askai*.{min.js,min.css}",
+    "dev:vanilla": "bun --filter @algolia/sitesearch dev & bun --filter vanilla serve"
   },
   "keywords": [],
   "author": "",

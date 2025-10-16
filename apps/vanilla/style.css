@@ -1,0 +1,293 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Sora:wght@100..800&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Tiktok Sans,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+  line-height: 1.6;
+  color: #0f172a;
+  background: #f8fafc;
+  min-height: 100vh;
+  padding: 32px 16px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin: 0 auto 32px;
+}
+
+.header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  font-family: Sora, sans-serif;
+  color: #0f172a;
+}
+
+.header p {
+  font-size: 14px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Bento layout using flex columns */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.left-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    flex-direction: row;
+    align-items: start;
+  }
+  .left-col {
+    flex: 1;
+    min-width: 0;
+  }
+  .right-col {
+    flex: 2;
+  }
+  .right-col .doc-card {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    overflow: auto;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0f172a;
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.demo-container {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1em;
+  border: 1px dashed #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.doc {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.doc-steps {
+  list-style: none;
+  counter-reset: step;
+  display: grid;
+  gap: 12px;
+}
+
+.doc-steps li {
+  counter-increment: step;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.doc-steps li h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.doc-steps li h3::before {
+  content: counter(step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.doc h3 {
+  font-size: 18px;
+  font-weight: 300;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.doc p {
+  margin: 6px 0;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.doc strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.doc code {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-family:
+    IBM Plex Mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  font-size: 12px;
+}
+
+.doc pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 10px 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 6px 0;
+}
+
+.doc pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.doc a {
+  color: #4f46e5;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+  font-weight: 500;
+}
+
+.doc a:hover {
+  border-bottom-color: #4f46e5;
+}
+
+.doc .doc-section {
+  margin-top: 12px;
+}
+
+.doc .doc-section:first-child {
+  margin-top: 0;
+}
+
+/* On small screens, cards stack naturally; the guide is not sticky */
+
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  padding: 12px;
+  color: #64748b;
+  font-size: 12px;
+}
+.footer a {
+  color: #334155;
+  text-decoration: none;
+  border-bottom: 1px solid #cbd5e1;
+}
+.footer a:hover {
+  border-bottom-color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 16px 12px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+  }
+
+  .header p {
+    font-size: 13px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card h2 {
+    font-size: 15px;
+  }
+
+  .doc {
+    padding: 10px;
+  }
+
+  .doc h3 {
+    font-size: 16px;
+  }
+
+  .doc p {
+    font-size: 12px;
+  }
+  .right-col .doc-card {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
