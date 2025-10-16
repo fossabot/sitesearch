@@ -8,7 +8,8 @@
     "build:docs": "bun --filter docs build",
     "bundle": "bun --filter @algolia/sitesearch run build",
     "bundle:zip": "bun --filter @algolia/sitesearch build && cd packages/standalone/dist && zip -r sitesearch-bundles.zip search*.{min.js,min.css} search-askai*.{min.js,min.css}",
-    "dev:vanilla": "bun --filter @algolia/sitesearch dev & bun --filter vanilla serve"
+    "dev:vanilla": "bun --filter @algolia/sitesearch dev & bun --filter vanilla serve",
+    "build:vanilla": "bun --filter @algolia/sitesearch build"
   },
   "keywords": [],
   "author": "",
