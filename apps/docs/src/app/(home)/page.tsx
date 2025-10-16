@@ -198,6 +198,39 @@ export default function HomePage() {
             </Link>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+          <div className="flex-wrap">
+            <p>Built with 💙 by Algolia.</p>{" "}
+            <p className="flex mt-2 items-center justify-center gap-2">
+              Sourced on
+              <a
+                href="https://github.com/algolia/sitesearch"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white"
+                  alt="View on GitHub"
+                  className="h-5"
+                />
+              </a>
+              <span>& Edit in</span>
+              <a
+                href="https://codesandbox.io/p/github/algolia/sitesearch"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://img.shields.io/badge/Codesandbox-040404?style=for-the-badge&logo=codesandbox&logoColor=DBDBDB"
+                  alt="Edit in CodeSandbox"
+                  className="h-5"
+                />
+              </a>
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );

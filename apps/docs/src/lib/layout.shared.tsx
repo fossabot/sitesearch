@@ -35,6 +35,7 @@ export function baseOptions(): BaseLayoutProps {
         </>
       ),
     },
+    githubUrl: "https://github.com/algolia/site-search",
     // see https://fumadocs.dev/docs/ui/navigation/links
     links: [],
   };
