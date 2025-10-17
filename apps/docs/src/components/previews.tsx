@@ -53,7 +53,7 @@ export function PreviewSearchNoAskAI() {
       <div className="flex justify-between items-center mb-2 ">
         <div>
           <CopyCodeButton
-            code={`npx shadcn@latest @add @algolia/search`}
+            code={`npx shadcn@latest add @algolia/search`}
             title="Copy install command"
           ></CopyCodeButton>
         </div>
