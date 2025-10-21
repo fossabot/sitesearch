@@ -1308,9 +1308,9 @@ const Footer = memo(function Footer({ showChat }: { showChat: boolean }) {
          */}
         <a
           className="inline-flex items-center gap-2 text-muted-foreground text-sm no-underline transition-colors hover:text-blue-600"
-          href="https://www.algolia.com"
+          href="https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch"
           target="_blank"
-          rel="noopener quicksearch"
+          rel="noopener noreferrer"
         >
           <span className="md:block hidden">Powered by </span>
           <AlgoliaLogo />

@@ -372,9 +372,9 @@ const Footer = memo(function Footer({ showChat }: { showChat: boolean }) {
          */}
         <a
           className="ss-footer-powered-by"
-          href="https://www.algolia.com"
+          href="https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch"
           target="_blank"
-          rel="noopener quicksearch"
+          rel="noopener noreferrer"
         >
           <span>Powered by </span>
           <AlgoliaLogo />
