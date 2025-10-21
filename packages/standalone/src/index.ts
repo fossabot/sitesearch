@@ -5,3 +5,6 @@ export { default as Search } from "./components/search/index";
 // Export sitesearch-with askai
 export type { SearchWithAskAIConfig } from "./components/search-askai/index";
 export { default as SearchWithAskAI } from "./components/search-askai/index";
+
+// Shared types
+export type { HitsAttributesMapping } from "./components/types";

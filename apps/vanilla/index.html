@@ -66,6 +66,43 @@
 
     <script src="./node_modules/@algolia/sitesearch/dist/search.min.js"></script>
     <script src="./node_modules/@algolia/sitesearch/dist/search-askai.min.js"></script>
-    <script src="./main.js"></script>
+    <script>
+      const applicationId = "betaHAXPMHIMMC";
+      const apiKey = "8b00405cba281a7d800ccec393e9af24";
+      const indexName = "algolia_podcast_sample_dataset";
+      const assistantId = "Y89iGlsnihaU";
+      const baseAskaiUrl = "https://beta-askai.algolia.com";
+
+      // Search experience
+      if (window.SiteSearch) {
+        window.SiteSearch.init({
+          container: "#search",
+          applicationId,
+          apiKey,
+          indexName,
+          attributes: {
+            primaryText: "title",
+            secondaryText: "description",
+            image: "imageUrl",
+          },
+        });
+      }
+
+      // Search with AskAI
+      if (window.SiteSearchAskAI) {
+        window.SiteSearchAskAI.init({
+          container: "#askai",
+          applicationId,
+          apiKey,
+          indexName,
+          assistantId,
+          baseAskaiUrl,
+          attributes: {
+            primaryText: "title",
+            secondaryText: "description",
+          },
+        });
+      }
+    </script>
   </body>
   </html>

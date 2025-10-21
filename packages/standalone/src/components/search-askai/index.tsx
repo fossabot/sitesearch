@@ -17,6 +17,7 @@ import { useKeyboardNavigation } from "./useKeyboardNavigation";
 import { useSearchState } from "./useSearchState";
 
 import "./styles.css";
+import type { HitsAttributesMapping } from "../types";
 import { SearchButton } from "./search-button";
 import { Modal } from "./search-modal";
 import useEffectiveDarkMode from "./useEffectiveDarkMode";
@@ -44,6 +45,8 @@ export interface SearchWithAskAIConfig {
   buttonProps?: ComponentProps<typeof SearchButton>;
   /** Enable dark mode (optional) */
   darkMode?: boolean;
+  /** Map which hit attributes to render (supports dotted paths) */
+  attributes?: HitsAttributesMapping;
 }
 
 interface SearchBoxProps {
@@ -209,6 +212,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
           query={query}
           selectedIndex={selectedIndex}
           onAskAI={() => setShowChat(true)}
+          attributes={config.attributes}
         />
       </div>
     </>

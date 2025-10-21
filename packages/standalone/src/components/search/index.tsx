@@ -14,6 +14,7 @@ import { SearchInput } from "./search-input";
 import { useKeyboardNavigation } from "./useKeyboardNavigation";
 
 import "./styles.css";
+import type { HitsAttributesMapping } from "../types";
 import { SearchButton } from "./search-button";
 import { Modal } from "./search-modal";
 import useEffectiveDarkMode from "./useEffectiveDarkMode";
@@ -37,6 +38,8 @@ export interface SearchConfig {
   buttonProps?: ComponentProps<typeof SearchButton>;
   /** Enable dark mode (optional) */
   darkMode?: boolean;
+  /** Map which hit attributes to render (supports dotted paths) */
+  attributes?: HitsAttributesMapping;
 }
 
 interface SearchBoxProps {
@@ -103,6 +106,7 @@ interface ResultsPanelProps {
 const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
   query,
   selectedIndex,
+  config,
 }) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -132,9 +136,10 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
       {/** biome-ignore lint/a11y/useSemanticElements: . */}
       <div ref={containerRef} className="ss-hits-container" role="listbox">
         <HitsList
-          hits={items as unknown[]}
+          hits={items as any[]}
           query={query}
           selectedIndex={selectedIndex}
+          attributes={config.attributes}
         />
       </div>
     </>

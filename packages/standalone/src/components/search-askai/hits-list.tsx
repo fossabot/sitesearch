@@ -2,8 +2,10 @@
 /** biome-ignore-all lint/a11y/useSemanticElements: . */
 /** biome-ignore-all lint/a11y/useSemanticElements: hand crafted interactions */
 
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Highlight } from "react-instantsearch";
+import type { HitsAttributesMapping, SearchHit } from "../types";
+import { toAttributePath } from "../types";
 import { SparklesIcon } from "./icons";
 
 interface HitsActionsProps {
@@ -38,10 +40,11 @@ const HitsActions = memo(function HitsActions({
 });
 
 interface HitsListProps {
-  hits: any[];
+  hits: SearchHit[];
   query: string;
   selectedIndex: number;
   onAskAI: () => void;
+  attributes?: HitsAttributesMapping;
 }
 
 export const HitsList = memo(function HitsList({
@@ -49,7 +52,17 @@ export const HitsList = memo(function HitsList({
   query,
   selectedIndex,
   onAskAI,
+  attributes,
 }: HitsListProps) {
+  const mapping: Required<Pick<HitsAttributesMapping, "primaryText">> &
+    Partial<HitsAttributesMapping> = useMemo(
+    () => ({
+      primaryText: attributes?.primaryText || "title",
+      secondaryText: attributes?.secondaryText || "description",
+      tertiaryText: attributes?.tertiaryText,
+    }),
+    [attributes],
+  );
   return (
     <>
       <HitsActions
@@ -57,7 +70,7 @@ export const HitsList = memo(function HitsList({
         isSelected={selectedIndex === 0}
         onAskAI={onAskAI}
       />
-      {hits.map((hit: any, idx: number) => {
+      {hits.map((hit: SearchHit, idx: number) => {
         const isSel = selectedIndex === idx + 1;
         return (
           <a
@@ -70,11 +83,27 @@ export const HitsList = memo(function HitsList({
             aria-selected={isSel}
           >
             <p className="ss-infinite-hits-item-title">
-              <Highlight attribute="title" hit={hit} />
+              <Highlight
+                attribute={toAttributePath(mapping.primaryText)}
+                hit={hit}
+              />
             </p>
             <p className="ss-infinite-hits-item-description">
-              <Highlight attribute="description" hit={hit} />
+              {mapping.secondaryText ? (
+                <Highlight
+                  attribute={toAttributePath(mapping.secondaryText)}
+                  hit={hit}
+                />
+              ) : null}
             </p>
+            {mapping.tertiaryText ? (
+              <p className="ss-infinite-hits-item-description">
+                <Highlight
+                  attribute={toAttributePath(mapping.tertiaryText)}
+                  hit={hit}
+                />
+              </p>
+            ) : null}
           </a>
         );
       })}
