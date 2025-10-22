@@ -23,13 +23,6 @@
               <div id="search"></div>
             </div>
           </div>
-
-          <div class="card">
-            <h2>Search + Ask AI</h2>
-            <div class="demo-container">
-              <div id="askai"></div>
-            </div>
-          </div>
         </div>
 
         <div class="right-col">
@@ -39,19 +32,20 @@
               <ol class="doc-steps">
                 <li>
                   <h3>Iterate on the components</h3>
-                  <p>Edit in <code>packages/standalone/src/components/search/*</code> or <code>packages/standalone/src/components/search-askai/*</code></p>
+                  <p>Edit in <code>packages/standalone/src/components/search/*</code></p>
                 </li>
                 <li>
                   <h3>View your changes here</h3>
-                  <p>Use the demos on the left (Search Only, Search + Ask AI).</p>
+                  <p>Use the demo on the left</p>
                 </li>
                 <li>
                   <h3>Build the bundle</h3>
-                  <pre><code>bun run bundle:zip</code></pre>
+                  <p>When you are happy with your changes, build the bundle</p>
+                  <pre><code>bun run bundle</code></pre>
                 </li>
                 <li>
-                  <h3>Download output</h3>
-                  <pre><code>packages/standalone/dist/sitesearch-bundles.zip</code></pre>
+                  <h3>Download output & use in your project</h3>
+                  <pre><code>packages/standalone/dist/*</code></pre>
                 </li>
               </ol>
             </div>
@@ -65,13 +59,10 @@
     </div>
 
     <script src="./node_modules/@algolia/sitesearch/dist/search.min.js"></script>
-    <script src="./node_modules/@algolia/sitesearch/dist/search-askai.min.js"></script>
     <script>
       const applicationId = "betaHAXPMHIMMC";
       const apiKey = "8b00405cba281a7d800ccec393e9af24";
       const indexName = "algolia_podcast_sample_dataset";
-      const assistantId = "Y89iGlsnihaU";
-      const baseAskaiUrl = "https://beta-askai.algolia.com";
 
       // Search experience
       if (window.SiteSearch) {
@@ -84,22 +75,6 @@
             primaryText: "title",
             secondaryText: "description",
             image: "imageUrl",
-          },
-        });
-      }
-
-      // Search with AskAI
-      if (window.SiteSearchAskAI) {
-        window.SiteSearchAskAI.init({
-          container: "#askai",
-          applicationId,
-          apiKey,
-          indexName,
-          assistantId,
-          baseAskaiUrl,
-          attributes: {
-            primaryText: "title",
-            secondaryText: "description",
           },
         });
       }
