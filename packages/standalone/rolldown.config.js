@@ -1,5 +1,3 @@
-import autoprefixer from "autoprefixer";
-import cssnano from "cssnano";
 import { defineConfig } from "rolldown";
 import { dts } from "rolldown-plugin-dts";
 import postcss from "rollup-plugin-postcss";
@@ -34,7 +32,6 @@ export default defineConfig([
         extract: "search.min.css",
       }),
     ],
-    treeshake: true,
     ...common,
   },
   {
@@ -52,13 +49,12 @@ export default defineConfig([
         extract: "search-askai.min.css",
       }),
     ],
-    treeshake: true,
     ...common,
   },
   {
     input: "src/index.ts",
     output: { dir: "dist", format: "es" },
     plugins: [dts()],
-    treeshake: true,
+    ...common,
   },
 ]);

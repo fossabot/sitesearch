@@ -205,6 +205,12 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
 }
 
 const Footer = memo(function Footer() {
+  const basePoweredByUrl =
+    "https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch";
+  const poweredByHref =
+    typeof window !== "undefined"
+      ? `${basePoweredByUrl}&utm_source=${encodeURIComponent(window.location.hostname)}`
+      : basePoweredByUrl;
   return (
     <div className="ss-footer">
       <div className="ss-footer-left">
@@ -261,7 +267,7 @@ const Footer = memo(function Footer() {
          */}
         <a
           className="ss-footer-powered-by"
-          href="https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch"
+          href={poweredByHref}
           target="_blank"
           rel="noopener noreferrer"
         >

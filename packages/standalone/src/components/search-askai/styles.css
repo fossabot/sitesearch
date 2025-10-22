@@ -171,6 +171,10 @@
   text-decoration: none;
 }
 
+.ssask-exp .ss-search-left-button {
+  color: var(--search-secondary-color);
+}
+
 .ssask-exp .ss-searchbox-form:focus-within .ss-search-left-button {
   color: var(--search-primary-color);
 }

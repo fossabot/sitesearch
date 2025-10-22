@@ -514,6 +514,12 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
 }
 
 const Footer = memo(function Footer() {
+  const basePoweredByUrl =
+    "https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch";
+  const poweredByHref =
+    typeof window !== "undefined"
+      ? `${basePoweredByUrl}&utm_source=${encodeURIComponent(window.location.hostname)}`
+      : basePoweredByUrl;
   return (
     <div className="flex items-center justify-between bg-background rounded-b-sm p-4">
       <div className="inline-flex items-center gap-4 text-sm">
@@ -540,7 +546,7 @@ const Footer = memo(function Footer() {
          */}
         <a
           className="flex items-center gap-2 text-muted-foreground text-sm no-underline transition-colors hover:text-primary"
-          href="https://www.algolia.com/developers?utm_medium=referral&utm_content=powered_by&utm_campaign=sitesearch"
+          href={poweredByHref}
           target="_blank"
           rel="noopener sitesearch"
         >

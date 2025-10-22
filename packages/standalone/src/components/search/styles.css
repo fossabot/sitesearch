@@ -172,6 +172,10 @@
   text-decoration: none;
 }
 
+.ss-exp .ss-search-left-button {
+  color: var(--search-secondary-color);
+}
+
 .ss-exp .ss-searchbox-form:focus-within .ss-search-left-button {
   color: var(--search-primary-color);
 }

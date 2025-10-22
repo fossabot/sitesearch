@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bun --filter docs dev",
     "build:docs": "bun --filter docs build",
-    "bundle": "bun --filter @algolia/sitesearch run build",
+    "bundle": "bun --filter @algolia/sitesearch build",
     "dev:vanilla": "bun --filter @algolia/sitesearch dev & bun --filter vanilla serve",
     "build:vanilla": "bun --filter @algolia/sitesearch build"
   },
@@ -17,7 +17,7 @@
     "apps/*",
     "packages/*"
   ],
-  "packageManager": "bun@1.1.29",
+  "packageManager": "bun@1.3.0",
   "devDependencies": {
     "@biomejs/biome": "2.0.0"
   },

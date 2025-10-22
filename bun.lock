@@ -81,8 +81,6 @@
         "@types/react": "^19.1.10",
         "@types/react-dom": "^19.1.7",
         "@vitejs/plugin-react": "^5.0.0",
-        "autoprefixer": "^10.4.20",
-        "cssnano": "^7.0.6",
         "globals": "^16.3.0",
         "postcss": "^8.4.49",
         "preact": "^10.24.3",
