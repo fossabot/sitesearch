@@ -21,16 +21,20 @@ export const HitsList = memo(function HitsList({
   attributes,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
-  const mapping: Required<Pick<HitsAttributesMapping, "primaryText">> &
-    Partial<HitsAttributesMapping> = useMemo(
+  const mapping = useMemo(
     () => ({
-      primaryText: attributes?.primaryText || "title",
-      secondaryText: attributes?.secondaryText || "description",
+      primaryText: attributes?.primaryText as string,
+      secondaryText: attributes?.secondaryText,
       tertiaryText: attributes?.tertiaryText,
       image: attributes?.image,
     }),
     [attributes],
   );
+
+  if (!attributes || !mapping.primaryText) {
+    throw new Error("At least a primaryText is required to display results");
+  }
+
   return (
     <>
       {hits.map((hit: SearchHit, idx: number) => {

@@ -72,6 +72,8 @@ export interface SearchWithAskAIConfig {
   buttonText?: string;
   /** Custom search button props (optional) */
   buttonProps?: React.ComponentProps<typeof SearchButton>;
+  /** Map which hit attributes to render (supports dotted paths) */
+  attributes: HitsAttributesMapping;
 }
 
 interface SearchButtonProps {
@@ -266,6 +268,32 @@ const AlgoliaLogo = ({ size = 150 }: IconProps) => (
     />
   </svg>
 );
+
+// Attribute Mapping
+type HitsAttributesMapping = {
+  primaryText: string;
+  secondaryText?: string;
+  tertiaryText?: string;
+  image?: string;
+};
+
+function toAttributePath(attribute: undefined): undefined;
+function toAttributePath(attribute: string): string | string[];
+function toAttributePath(attribute?: string): string | string[] | undefined {
+  if (!attribute) return undefined;
+  return attribute.includes(".") ? attribute.split(".") : attribute;
+}
+
+function getByPath<T = unknown>(obj: unknown, path?: string): T | undefined {
+  if (!obj || !path) return undefined;
+  const parts = path.split(".");
+  let current: unknown = obj;
+  for (const part of parts) {
+    if (current == null || typeof current !== "object") return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current as T | undefined;
+}
 
 // ============================================================================
 // UI Helper Components
@@ -861,6 +889,7 @@ interface HitsListProps {
   query: string;
   selectedIndex: number;
   onAskAI: () => void;
+  attributes?: HitsAttributesMapping;
 }
 
 const HitsList = memo(function HitsList({
@@ -868,7 +897,23 @@ const HitsList = memo(function HitsList({
   query,
   selectedIndex,
   onAskAI,
+  attributes,
 }: HitsListProps) {
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const mapping = useMemo(
+    () => ({
+      primaryText: attributes?.primaryText,
+      secondaryText: attributes?.secondaryText,
+      tertiaryText: attributes?.tertiaryText,
+      image: attributes?.image,
+    }),
+    [attributes],
+  );
+
+  if (!attributes || !mapping.primaryText) {
+    throw new Error("At least a primaryText is required to display results");
+  }
+
   return (
     <>
       <HitsActions
@@ -879,22 +924,70 @@ const HitsList = memo(function HitsList({
       <p className="text-muted-foreground text-sm mt-4 mb-2">Results</p>
       {hits.map((hit: any, idx: number) => {
         const isSel = selectedIndex === idx + 1;
+        const primaryVal = getByPath<string>(hit, mapping.primaryText);
+        const imageUrl = getByPath<string>(hit, mapping.image);
+        const hasImage = Boolean(imageUrl);
+        const isImageFailed = failedImages[hit.objectID] || !hasImage;
         return (
           <a
             key={hit.objectID}
             href={hit.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block hover:bg-accent hover:border-border hover:shadow-lg hover:-translate-y-px aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95" : ""}`}
+            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block hover:bg-accent hover:border-border hover:shadow-lg hover:-translate-y-px aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
             role="option"
             aria-selected={isSel}
           >
-            <p className="text-base text-foreground m-0 mb-2 font-normal [&_mark]:text-blue-600 [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4 aria-selected:text-blue-600 aria-selected:bg-transparent aria-selected:underline aria-selected:decoration-1 aria-selected:underline-offset-4">
-              <Highlight attribute="title" hit={hit} />
-            </p>
-            <p className="text-muted-foreground m-0 text-sm leading-normal overflow-hidden text-ellipsis [&_mark]:text-foreground [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4">
-              <Highlight attribute="description" hit={hit} />
-            </p>
+            {hasImage ? (
+              <div className="w-[100px] h-[100px] self-start flex-[0_0_100px] items-center justify-center overflow-hidden rounded-sm bg-muted">
+                {!isImageFailed ? (
+                  <img
+                    src={imageUrl as string}
+                    alt={primaryVal || ""}
+                    className="w-full h-full object-contain rounded-sm"
+                    onError={() =>
+                      setFailedImages((prev) => ({
+                        ...prev,
+                        [hit.objectID]: true,
+                      }))
+                    }
+                  />
+                ) : (
+                  <div
+                    className="flex items-center justify-center w-full h-full text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <SearchIcon />
+                  </div>
+                )}
+              </div>
+            ) : null}
+            <div>
+              <p className="text-base text-foreground m-0 mb-2 font-normal [&_mark]:text-blue-600 [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4 aria-selected:text-blue-600 aria-selected:bg-transparent aria-selected:underline aria-selected:decoration-1 aria-selected:underline-offset-4">
+                <Highlight
+                  attribute={toAttributePath(mapping.primaryText as string)}
+                  hit={hit}
+                />
+              </p>
+              {mapping.secondaryText && (
+                <p className="text-muted-foreground m-0 text-sm leading-normal overflow-hidden text-ellipsis [&_mark]:text-foreground [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4">
+                  {mapping.secondaryText ? (
+                    <Highlight
+                      attribute={toAttributePath(mapping.secondaryText)}
+                      hit={hit}
+                    />
+                  ) : null}
+                </p>
+              )}
+              {mapping.tertiaryText ? (
+                <p className="text-muted-foreground m-0 text-sm leading-normal overflow-hidden text-ellipsis [&_mark]:text-foreground [&_mark]:bg-transparent [&_mark]:underline [&_mark]:decoration-1 [&_mark]:underline-offset-4 mt-2">
+                  <Highlight
+                    attribute={toAttributePath(mapping.tertiaryText)}
+                    hit={hit}
+                  />
+                </p>
+              ) : null}
+            </div>
           </a>
         );
       })}
@@ -1205,6 +1298,7 @@ const ResultsPanel = memo(function ResultsPanel({
           query={query}
           selectedIndex={selectedIndex}
           onAskAI={() => setShowChat(true)}
+          attributes={config.attributes}
         />
       </div>
     </>

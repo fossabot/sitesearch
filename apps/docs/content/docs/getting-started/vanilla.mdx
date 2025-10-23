@@ -1,0 +1,56 @@
+---
+title: SiteSearch with Vanilla JS
+description: "Using SiteSearch with Vanilla JS"
+---
+
+We provide a vanilla version of the search experiences that can be used in any project.
+
+Start with our [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch) or clone the repository [[github.com/algolia/sitesearch](https://github.com/algolia/sitesearch)] and start iterating on the components. Feel free to use it as a starting point for your own projects. When you are happy with your changes, you can build the vanilla bundle and use it in your project.
+
+## Prerequisites
+
+- [Algolia prerequisites](/docs#prerequisites)
+
+## Bundled version
+
+We provide bundled version & hosted versions of the all the vanilla search experiences. They are available via CDN and can be used in any project.
+
+```html
+<!-- styles -->
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
+
+<!-- scripts -->
+<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.js"></script>
+```
+
+### Usage
+
+We document how to use each experience in the [Experiences](/docs/experiences) section **under the VanillaJS tab**.
+
+Typical example:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
+<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.js"></script>
+<div id="search"></div>
+<script>
+  SiteSearch.init({
+    container: "#search",
+    applicationId: "YOUR_APP_ID",
+    apiKey: "YOUR_API_KEY",
+    indexName: "YOUR_INDEX_NAME",
+    attributes: {
+      primaryText: "title", // the attribute to display in the hits list
+    },
+  });
+</script>
+```
+
+This code should already work out of the box with the bundled version.
+
+
+### Resources
+
+1. The [@algolia/sitesearch npm package](https://www.npmjs.com/package/@algolia/sitesearch)
+2. [A list of all the available vanilla experiences](https://unpkg.com/@algolia/sitesearch@1.0.3/dist/?meta)
+3. [The CodeSandBox](https://codesandbox.io/p/github/algolia/sitesearch) to create and manage your own vanilla bundle

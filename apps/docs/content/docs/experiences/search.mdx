@@ -3,6 +3,11 @@ title: Search
 description: "The default opinionated search experience built."
 ---
 
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Tabs, TabsList, TabsTrigger, TabsContent, TabsContents } from '@/components/animate-ui/components/animate/tabs';
+import { LogosShadcn } from '@/components/icons/shadcn';
+import { LogosJavascript } from '@/components/icons/javascript';
+
 The `Search` experience focuses on fast retrieval, instant feedback, and sensible defaults for Algolia-powered catalogs.
 
 ## Use cases
@@ -14,10 +19,18 @@ The `Search` experience focuses on fast retrieval, instant feedback, and sensibl
 
 <PreviewSearchNoAskAI />
 
-## Usage
-
+<Tabs>
+  <div className="flex items-center justify-between gap-2 mt-20 mb-2">
+    <h2 className="!my-0 mr-4">Usage</h2>
+    <TabsList className="flex items-center gap-2">
+      <TabsTrigger value="shadcn" className="flex items-center gap-2 px-2"> <LogosShadcn /> <span>shadcn/ui</span></TabsTrigger>
+      <TabsTrigger value="vanilla" className="flex items-center gap-2 px-2"> <LogosJavascript /> <span >Vanilla</span></TabsTrigger>
+    </TabsList>
+  </div>
+  <TabsContents>
+    <TabsContent value="shadcn">
 ```tsx
-npx shadcn@latest add https://sitesearch.algolia.com/r/search.json
+npx shadcn@latest add @algolia/search
 ```
 
 This will add the `Search` experience to your project under `components/search`. Use it like this:
@@ -29,19 +42,89 @@ import Search from "@/components/search";
   applicationId="betaHAXPMHIMMC"
   apiKey="8b00405cba281a7d800ccec393e9af24"
   indexName="algolia_podcast_sample_dataset"
-  placeholder="Search for podcasts..."
-  hitsPerPage={15}
-  keyboardShortcut="cmd+k"
-  buttonText="🎧 Search Podcasts"
+  attributes={{
+    primaryText: "title",
+    secondaryText: "description",
+    image: "imageUrl",
+  }}
 />
 ```
+
+### Structure
+
+<Files>
+  <Folder name="app">
+    <File name="page.tsx" />
+  </Folder>
+  <Folder name="components" defaultOpen>
+    <File name="search.tsx" />
+  </Folder>
+  <Folder name="hooks" defaultOpen>
+    <File name="use-keyboard-navigation.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+    </TabsContent>
+    <TabsContent value="vanilla">
+
+### Use our CDN bundle (recommended)
+```html
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.css" />
+<div id="search-container"></div>
+<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search.min.js"></script>
+<script>
+  SiteSearch.init({
+    container: '#search-container',
+    appId: 'YOUR_APP_ID',
+    apiKey: 'YOUR_API_KEY',
+    indexName: 'YOUR_INDEX_NAME',
+    attributes: {
+      primaryText: 'title',
+    },
+  });
+</script>
+```
+
+
+### Build your own bundle (advanced)
+- Open [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch).
+- Update the experience in `packages/standalone` (requires React skills)
+- Build the bundle and use it in your project `bun run bundle`
+- Download the bundle from `packages/standalone/dist`
+- Use it in your project
+
+```html
+<!-- styles -->
+<link rel="stylesheet" href="./path/to/your/search.min.css" />
+
+<!-- scripts -->
+<script src="./path/to/your/search.min.js"></script>
+
+<!-- container -->
+<div id="search-container"></div>
+
+<!-- initialization -->
+<script>
+  SiteSearch.init({
+    container: '#search-container',
+    appId: 'YOUR_APP_ID',
+    apiKey: 'YOUR_API_KEY',
+    indexName: 'YOUR_INDEX_NAME',
+    attributes: {
+      primaryText: 'title',
+    },
+  });
+</script>
+```
+    </TabsContent>
+  </TabsContents>
+</Tabs>
 
 
 ## Extending further
 
 - Integrate Algolia Recommend for related product below the hit list.
 - Change the styling to match your product's design.
-- Update `hit-list.tsx` to customize the hit rendering.
 - Add RefinementList, RangeSlider, ToggleRefinement, and other InstantSearch widgets to make it more powerful.
 - Add a `SearchEmpty` slot to highlight help center content or contact actions when no results surface.
 - Shape it to infinity with full support for `react-instantsearch`.

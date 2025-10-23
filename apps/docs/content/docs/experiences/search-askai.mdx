@@ -3,6 +3,11 @@ title: Search with Ask AI
 description: "The opinionated search + Ask AI experience built. Built like DocSearch but with Algolia InstantSearch and Ask AI."
 ---
 
+import { File, Folder, Files } from 'fumadocs-ui/components/files';
+import { Tabs, TabsList, TabsTrigger, TabsContent, TabsContents } from '@/components/animate-ui/components/animate/tabs';
+import { LogosShadcn } from '@/components/icons/shadcn';
+import { LogosJavascript } from '@/components/icons/javascript';
+
 Combine precise retrieval with conversational AI search. `Search + AskAI` keeps traditional hits in view while letting users ask follow-up questions powered by [Algolia’s Ask AI](https://www.algolia.com/products/ai/ask-ai).
 
 ## Use cases
@@ -16,10 +21,18 @@ Combine precise retrieval with conversational AI search. `Search + AskAI` keeps 
 
 <PreviewSiteSearch />
 
-## Usage
-
+<Tabs>
+  <div className="flex items-center justify-between gap-2 mt-20 mb-2">
+    <h2 className="!my-0 mr-4">Usage</h2>
+    <TabsList className="flex items-center gap-2">
+      <TabsTrigger value="shadcn" className="flex items-center gap-2 px-2"> <LogosShadcn /> <span>shadcn/ui</span></TabsTrigger>
+      <TabsTrigger value="vanilla" className="flex items-center gap-2 px-2"> <LogosJavascript /> <span >Vanilla</span></TabsTrigger>
+    </TabsList>
+  </div>
+  <TabsContents>
+    <TabsContent value="shadcn">
 ```tsx
-npx shadcn@latest add https://sitesearch.algolia.com/r/search-ai.json
+npx shadcn@latest add @algolia/search-ai
 ```
 
 This will add the `Search with AskAI` experience to your project under `components/search-ai`. Use it like this:
@@ -32,14 +45,15 @@ import SearchWithAskAi from "@/components/search-ai";
   apiKey="8b00405cba281a7d800ccec393e9af24"
   indexName="algolia_podcast_sample_dataset"
   assistantId="Y89iGlsnihaU"
-  placeholder="Search for podcasts..."
-  hitsPerPage={15}
-  keyboardShortcut="cmd+k"
-  buttonText="🎧 Search Podcasts with AskAI"
+  attributes={{
+    primaryText: "title",
+    secondaryText: "description",
+    image: "imageUrl",
+  }}
 />
 ```
 
-## Configuration
+### Configuration
 
 Prerequisites for using the `SearchWithAskAi` component:
 
@@ -47,6 +61,81 @@ Prerequisites for using the `SearchWithAskAi` component:
 - `apiKey`: The Algolia API key
 - `indexName`: The Algolia index name
 - `assistantId`: The Ask AI assistant ID
+
+
+### Structure
+
+<Files>
+  <Folder name="app">
+    <File name="page.tsx" />
+  </Folder>
+  <Folder name="components" defaultOpen>
+    <File name="search-ai.tsx" />
+  </Folder>
+  <Folder name="hooks" defaultOpen>
+    <File name="use-keyboard-navigation.tsx" />
+    <File name="use-search-state.tsx" />
+    <File name="use-askai.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+    </TabsContent>
+    <TabsContent value="vanilla">
+
+### Use our CDN bundle (recommended)
+```html
+<link rel="stylesheet" href="https://unpkg.com/@algolia/sitesearch@latest/dist/search-askai.min.css" />
+<div id="search-container"></div>
+<script src="https://unpkg.com/@algolia/sitesearch@latest/dist/search-askai.min.js"></script>
+<script>
+  SiteSearchAskAI.init({
+    container: '#search-container',
+    appId: 'YOUR_APP_ID',
+    apiKey: 'YOUR_API_KEY',
+    indexName: 'YOUR_INDEX_NAME',
+    assistantId: 'YOUR_ASSISTANT_ID',
+    attributes: {
+      primaryText: 'title',
+    },
+  });
+</script>
+```
+
+
+### Build your own bundle (advanced)
+- Open [CodeSandbox](https://codesandbox.io/p/github/algolia/sitesearch).
+- Update the experience in `packages/standalone` (requires React skills)
+- Build the bundle and use it in your project `bun run bundle`
+- Download the bundle from `packages/standalone/dist`
+- Use it in your project
+
+```html
+<!-- styles -->
+<link rel="stylesheet" href="./path/to/your/search-askai.min.css" />
+
+<!-- scripts -->
+<script src="./path/to/your/search-askai.min.js"></script>
+
+<!-- container -->
+<div id="search-container"></div>
+
+<!-- initialization -->
+<script>
+  SiteSearchAskAI.init({
+    container: '#search-container',
+    appId: 'YOUR_APP_ID',
+    apiKey: 'YOUR_API_KEY',
+    indexName: 'YOUR_INDEX_NAME',
+    assistantId: 'YOUR_ASSISTANT_ID',
+    attributes: {
+      primaryText: 'title',
+    },
+  });
+</script>
+```
+    </TabsContent>
+  </TabsContents>
+</Tabs>
 
 ## Extending further
 

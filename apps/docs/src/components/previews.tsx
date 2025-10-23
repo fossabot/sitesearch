@@ -41,6 +41,10 @@ export function PreviewSiteSearch() {
           hitsPerPage={6}
           keyboardShortcut="cmd+k"
           buttonText="🎧 Search Podcasts"
+          attributes={{
+            primaryText: "title",
+            secondaryText: "description",
+          }}
         />
       </div>
     </>
@@ -79,6 +83,11 @@ export function PreviewSearchNoAskAI() {
           hitsPerPage={15}
           keyboardShortcut="cmd+k"
           buttonText="🎧 Search Podcasts"
+          attributes={{
+            primaryText: "title",
+            secondaryText: "description",
+            image: "imageUrl",
+          }}
         />
       </div>
     </>

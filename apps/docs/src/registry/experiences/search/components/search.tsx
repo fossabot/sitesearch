@@ -8,7 +8,7 @@
 import { liteClient as algoliasearch } from "algoliasearch/lite";
 import { ArrowDown, ArrowUp, CornerDownLeft, SearchIcon } from "lucide-react";
 import type React from "react";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   Configure,
@@ -38,6 +38,34 @@ export interface SearchConfig {
   buttonText?: string;
   /** Custom search button props (optional) */
   buttonProps?: React.ComponentProps<typeof SearchButton>;
+  /** Map which hit attributes to render (supports dotted paths) */
+  attributes?: HitsAttributesMapping;
+}
+// =========================================================================
+// Attribute Mapping
+// =========================================================================
+
+type HitsAttributesMapping = {
+  primaryText: string;
+  secondaryText?: string;
+  tertiaryText?: string;
+  image?: string;
+};
+
+function toAttributePath(attribute?: string): string | string[] | undefined {
+  if (!attribute) return undefined;
+  return attribute.includes(".") ? attribute.split(".") : attribute;
+}
+
+function getByPath<T = unknown>(obj: unknown, path?: string): T | undefined {
+  if (!obj || !path) return undefined;
+  const parts = path.split(".");
+  let current: unknown = obj;
+  for (const part of parts) {
+    if (current == null || typeof current !== "object") return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current as T | undefined;
 }
 
 // ============================================================================
@@ -177,19 +205,37 @@ interface HitsListProps {
   hits: any[];
   query: string;
   selectedIndex: number;
+  attributes?: HitsAttributesMapping;
 }
 
 const HitsList = memo(function HitsList({
   hits,
   selectedIndex,
+  attributes,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const mapping = useMemo(
+    () => ({
+      primaryText: attributes?.primaryText,
+      secondaryText: attributes?.secondaryText,
+      tertiaryText: attributes?.tertiaryText,
+      image: attributes?.image,
+    }),
+    [attributes],
+  );
+
+  if (!attributes || !mapping.primaryText) {
+    throw new Error("At least a primaryText is required to display results");
+  }
+
   return (
     <>
       {hits.map((hit: any, idx: number) => {
         const isSel = selectedIndex === idx;
-        const hasImage = Boolean(hit.imageUrl);
+        const imageUrl = getByPath<string>(hit, mapping.image);
+        const hasImage = Boolean(imageUrl);
         const isImageFailed = failedImages[hit.objectID] || !hasImage;
+        const primaryVal = getByPath<string>(hit, mapping.primaryText);
         return (
           <a
             key={hit.objectID}
@@ -200,35 +246,53 @@ const HitsList = memo(function HitsList({
             role="option"
             aria-selected={isSel}
           >
-            <div className="w-[100px] h-[100px] self-start flex-[0_0_100px] items-center justify-center overflow-hidden rounded-sm bg-muted">
-              {!isImageFailed ? (
-                <img
-                  src={hit.imageUrl}
-                  alt={hit.title}
-                  className="w-full h-full object-contain rounded-sm"
-                  onError={() =>
-                    setFailedImages((prev) => ({
-                      ...prev,
-                      [hit.objectID]: true,
-                    }))
-                  }
-                />
-              ) : (
-                <div
-                  className="flex items-center justify-center w-full h-full text-muted-foreground"
-                  aria-hidden="true"
-                >
-                  <SearchIcon />
-                </div>
-              )}
-            </div>
+            {hasImage ? (
+              <div className="w-[100px] h-[100px] self-start flex-[0_0_100px] items-center justify-center overflow-hidden rounded-sm bg-muted">
+                {!isImageFailed ? (
+                  <img
+                    src={imageUrl as string}
+                    alt={primaryVal || ""}
+                    className="w-full h-full object-contain rounded-sm"
+                    onError={() =>
+                      setFailedImages((prev) => ({
+                        ...prev,
+                        [hit.objectID]: true,
+                      }))
+                    }
+                  />
+                ) : (
+                  <div
+                    className="flex items-center justify-center w-full h-full text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <SearchIcon />
+                  </div>
+                )}
+              </div>
+            ) : null}
             <div>
               <p className="font-medium [&_mark]:bg-transparent [&_mark]:text-secondary-foreground [&_mark]:underline [&_mark]:underline-offset-4">
-                <Highlight attribute="title" hit={hit} />
+                <Highlight
+                  attribute={toAttributePath(mapping.primaryText) as any}
+                  hit={hit}
+                />
               </p>
               <p className="text-sm mt-2 text-muted-foreground [&_mark]:bg-transparent [&_mark]:text-foreground [&_mark]:underline [&_mark]:underline-offset-4">
-                <Highlight attribute="description" hit={hit} />
+                {mapping.secondaryText ? (
+                  <Highlight
+                    attribute={toAttributePath(mapping.secondaryText) as any}
+                    hit={hit}
+                  />
+                ) : null}
               </p>
+              {mapping.tertiaryText ? (
+                <p className="text-sm text-muted-foreground [&_mark]:bg-transparent [&_mark]:text-foreground [&_mark]:underline [&_mark]:underline-offset-4 mt-2">
+                  <Highlight
+                    attribute={toAttributePath(mapping.tertiaryText) as any}
+                    hit={hit}
+                  />
+                </p>
+              ) : null}
             </div>
           </a>
         );
@@ -414,6 +478,7 @@ interface ResultsPanelProps {
 const ResultsPanel = memo(function ResultsPanel({
   query,
   selectedIndex,
+  config,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -449,6 +514,7 @@ const ResultsPanel = memo(function ResultsPanel({
           hits={items as unknown[]}
           query={query}
           selectedIndex={selectedIndex}
+          attributes={config.attributes}
         />
       </div>
     </>

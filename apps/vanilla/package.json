@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "serve": "bunx vite serve ."
+    "serve": "bunx vite serve . --open"
   },
   "dependencies": {
     "@algolia/sitesearch": "workspace:*"

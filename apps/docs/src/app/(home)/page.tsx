@@ -33,6 +33,16 @@ export default function HomePage() {
                 words={[
                   "Modern",
                   "Lightning-fast",
+                  "Vanilla",
+                  "Conversational",
+                  "Keyboard-first",
+                  "Extensible",
+                  "Accessible",
+                  "Framework-agnostic",
+                  "Developer-first",
+                  "Enterprise-grade",
+                  "Intuitive",
+                  "Powerful",
                   "Production-ready",
                   "Beautiful",
                   "AI-Native",
@@ -66,7 +76,7 @@ export default function HomePage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-4">
               <Link
-                href="/docs"
+                href="/docs/experiences/search"
                 className="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors"
               >
                 Browse Components
@@ -94,8 +104,7 @@ export default function HomePage() {
                 </h2>
                 <p className="mt-2 text-lg max-w-2xl text-gray-600 dark:text-gray-400">
                   Our search components are designed to be fully composable so
-                  you can build, customize and extend them to your own needs
-                  with TypeScript support.
+                  you can build, customize and extend them to your own needs.
                 </p>
               </div>
               <Link
@@ -133,6 +142,11 @@ export default function HomePage() {
                   applicationId="betaHAXPMHIMMC"
                   apiKey="8b00405cba281a7d800ccec393e9af24"
                   indexName="algolia_podcast_sample_dataset"
+                  attributes={{
+                    primaryText: "title",
+                    secondaryText: "description",
+                    image: "imageUrl",
+                  }}
                 />
               </div>
 
@@ -172,6 +186,12 @@ export default function HomePage() {
                   indexName="algolia_podcast_sample_dataset"
                   baseAskaiUrl="https://beta-askai.algolia.com"
                   assistantId="Y89iGlsnihaU"
+                  attributes={{
+                    primaryText: "title",
+                    secondaryText: "description",
+                    tertiaryText: "title",
+                    image: "imageUrl",
+                  }}
                 />
               </div>
 

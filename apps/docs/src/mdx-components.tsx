@@ -1,3 +1,4 @@
+import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 import { PreviewSearchNoAskAI, PreviewSiteSearch } from "@/components/previews";
@@ -6,6 +7,11 @@ import { PreviewSearchNoAskAI, PreviewSiteSearch } from "@/components/previews";
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
     ...(defaultMdxComponents as MDXComponents),
+    pre: ({ ref: _ref, ...props }) => (
+      <CodeBlock {...props}>
+        <Pre>{props.children}</Pre>
+      </CodeBlock>
+    ),
     PreviewSiteSearch,
     PreviewSearchNoAskAI,
     ...components,

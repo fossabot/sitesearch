@@ -4,9 +4,10 @@
     "(root)",
     "---Getting started---",
     "index",
+    "getting-started/react-shadcn",
+    "getting-started/vanilla",
     "---Experiences---",
-    "experiences/search", 
-    "experiences/search-askai", 
-    "experiences/sidepanel"
+    "experiences/search",
+    "experiences/search-askai"
   ]
 }
