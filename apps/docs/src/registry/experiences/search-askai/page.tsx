@@ -11,6 +11,11 @@ export default function Page() {
         indexName="algolia_podcast_sample_dataset"
         baseAskaiUrl="https://beta-askai.algolia.com"
         assistantId="Y89iGlsnihaU"
+        attributes={{
+          primaryText: "title",
+          secondaryText: "description",
+          image: "imageUrl",
+        }}
       />
     </div>
   );

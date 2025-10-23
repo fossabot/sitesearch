@@ -9,6 +9,11 @@ export default function Page() {
         applicationId="betaHAXPMHIMMC"
         apiKey="8b00405cba281a7d800ccec393e9af24"
         indexName="algolia_podcast_sample_dataset"
+        attributes={{
+          primaryText: "title",
+          secondaryText: "description",
+          image: "imageUrl",
+        }}
       />
     </div>
   );
