@@ -47,6 +47,10 @@ export interface SearchWithAskAIConfig {
   darkMode?: boolean;
   /** Map which hit attributes to render (supports dotted paths) */
   attributes?: HitsAttributesMapping;
+  /** Enable Algolia Insights (optional, defaults to true) */
+  insights?: boolean;
+  /** Additional Algolia search parameters (optional) - e.g., analytics, filters, distinct, etc. */
+  searchParameters?: Record<string, unknown>;
 }
 
 interface SearchBoxProps {
@@ -259,7 +263,10 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
 
   return (
     <>
-      <Configure hitsPerPage={config.hitsPerPage || 8} />
+      <Configure
+        hitsPerPage={config.hitsPerPage || 8}
+        {...(config.searchParameters || {})}
+      />
       <div className="search-panel">
         <SearchBox
           query={query}
@@ -438,7 +445,7 @@ export default function SearchExperience(config: SearchWithAskAIConfig) {
           searchClient={searchClient}
           indexName={config.indexName}
           future={{ preserveSharedStateOnUnmount: true }}
-          insights
+          insights={config.insights || true}
         >
           <SearchModal onClose={closeModal} config={config} />
         </InstantSearch>
