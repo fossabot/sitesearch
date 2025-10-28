@@ -7,6 +7,7 @@ import { File, Folder, Files } from 'fumadocs-ui/components/files';
 import { Tabs, TabsList, TabsTrigger, TabsContent, TabsContents } from '@/components/animate-ui/components/animate/tabs';
 import { LogosShadcn } from '@/components/icons/shadcn';
 import { LogosJavascript } from '@/components/icons/javascript';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 Combine precise retrieval with conversational AI search. `Search + AskAI` keeps traditional hits in view while letting users ask follow-up questions powered by [Algolia’s Ask AI](https://www.algolia.com/products/ai/ask-ai).
 
@@ -143,6 +144,120 @@ Required props for using the `SearchWithAskAi` component:
   });
 </script>
 ```
+
+### References
+<TypeTable
+  type={{
+    applicationId: {
+      description: "Algolia Application ID (required)",
+      type: "string",
+      required: true,
+    },
+    apiKey: {
+      description: "Algolia API Key (required)",
+      type: "string",
+      required: true,
+    },
+    indexName: {
+      description: "Algolia Index Name (required)",
+      type: "string",
+      required: true,
+    },
+    assistantId: {
+      description: "AI Assistant ID (required for chat functionality)",
+      type: "string",
+      required: true,
+    },
+    attributes: {
+      description: "Map which hit attributes to render (supports dotted paths)",
+      type: "HitsAttributesMapping",
+      parameters: [
+        {
+          name: "primaryText",
+          description: "The first attribute to render in the search experience",
+        },
+        {
+          name: "secondaryText",
+          description: "The second attribute to render in the search experience (optional)",
+        },
+        {
+          name: "tertiaryText",
+          description: "The third attribute to render in the search experience (optional)",
+        },
+        {
+          name: "url",
+          description: "The URL to render in the search experience (optional)",
+        },
+        {
+          name: "image",
+          description: "The image to render in the search experience (optional)",
+        },
+      ],
+      required: true,
+    },
+    baseAskaiUrl: {
+      description: "Base URL for AI chat API (optional, defaults to beta endpoint)",
+      type: "string",
+      default: "\"https://askai.algolia.com\"",
+      required: false,
+    },
+    placeholder: {
+      description: "Placeholder text for search input (optional, defaults to \"What are you looking for?\")",
+      type: "string",
+      default: "\"What are you looking for?\"",
+      required: false,
+    },
+    hitsPerPage: {
+      description: "Number of hits per page (optional, defaults to 8)",
+      type: "number",
+      default: 8,
+      required: false,
+    },
+    keyboardShortcut: {
+      description: "Keyboard shortcut to open search (optional, defaults to \"cmd+k\")",
+      type: "string",
+      default: "\"cmd+k\"",
+      required: false,
+    },
+    buttonText: {
+      description: "Custom search button text (optional)",
+      type: "string",
+      required: false,
+    },
+    buttonProps: {
+      description: "Custom search button props (optional)",
+      type: "ComponentProps<typeof SearchButton>",
+      parameters: [
+        {
+          name: "onClick",
+          description: "The function to call when the button is clicked",
+        },
+        {
+          name: "children",
+          description: "The children to render in the button (optional)",
+        },
+      ],
+      required: false,
+    },
+    darkMode: {
+      description: "Enable dark mode (optional)",
+      type: "boolean",
+      required: false,
+    },
+    insights: {
+      description: "Enable Algolia Insights (optional, defaults to true)",
+      type: "boolean",
+      default: true,
+      required: false,
+    },
+    searchParameters: {
+      description: "Additional Algolia search parameters: https://www.algolia.com/doc/api-reference/search-api-parameters",
+      type: <span>See Algolia Search API Parameters</span>,
+      typeDescriptionLink: "https://www.algolia.com/doc/api-reference/search-api-parameters",
+      required: false,
+    },
+  }}
+/>
     </TabsContent>
   </TabsContents>
 </Tabs>
