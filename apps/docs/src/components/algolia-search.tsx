@@ -2,7 +2,7 @@
 
 import { DocSearchModal } from "@docsearch/react/modal";
 import type { SharedProps } from "fumadocs-ui/components/dialog/search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Replace these with your actual Algolia credentials
 const appId = "GCH2YM3XGA";
@@ -18,6 +18,35 @@ export default function AlgoliaSearch(props: SharedProps) {
   const isDark = theme === "dark";
 
   const [isAskAiActive, setIsAskAiActive] = useState(false);
+
+  // Add ESC key listener with two-step behavior: clear input first, then close
+  useEffect(() => {
+    if (!props.open) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        // Find the search input in the DocSearch modal
+        const searchInput = document.querySelector('.DocSearch-Input') as HTMLInputElement;
+        
+        if (searchInput && searchInput.value) {
+          // If there's text in the input, let DocSearch handle clearing it
+          // (Don't close the modal yet)
+          return;
+        }
+        
+        // If input is empty, close the modal
+        event.preventDefault();
+        event.stopPropagation();
+        props.onOpenChange(false);
+      }
+    };
+
+    // Use capture phase to intercept before DocSearch's handler
+    document.addEventListener("keydown", handleEscape, true);
+    return () => {
+      document.removeEventListener("keydown", handleEscape, true);
+    };
+  }, [props.open, props.onOpenChange]);
 
   if (!props.open) {
     return null;

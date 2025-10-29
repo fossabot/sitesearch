@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "fumadocs-core/link";
-import { ArrowRightIcon, SearchIcon, SparklesIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  SearchIcon,
+  SparklesIcon,
+  MessageSquareIcon,
+} from "lucide-react";
 import { WordRotate } from "@/components/ui/word-rotate";
 import Search from "@/registry/experiences/search/components/search";
 import SearchAskAI from "@/registry/experiences/search-askai/components/search-ai";
@@ -227,6 +232,23 @@ export default function HomePage() {
         <footer className="border-t py-6 text-center text-sm text-muted-foreground">
           <div className="flex-wrap">
             <p>Built with 💙 by Algolia.</p>{" "}
+                    {/* GitHub Discussions CTA Section */}
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center">
+            <p>
+              Looking for a specific experience but don't see it?{" "}
+              <Link
+                href="https://github.com/algolia/sitesearch/discussions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 font-medium"
+              >
+                Submit it on GitHub Discussions
+                <MessageSquareIcon className="h-3.5 w-3.5" />
+              </Link>
+            </p>
+          </div>
+        </div>
             <p className="flex mt-2 items-center justify-center gap-2">
               Sourced on
               <a
