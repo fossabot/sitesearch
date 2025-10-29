@@ -93,6 +93,47 @@ function Tabs({
     [isControlled, onValueChange],
   );
 
+  // Handle navigation to anchors inside tabs
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+
+      // Check if the hash target is inside one of the tab contents
+      const targetElement = document.getElementById(hash);
+      if (!targetElement) return;
+
+      // Find which tab contains this element by checking all tab panels
+      const allTabPanels = document.querySelectorAll('[role="tabpanel"]');
+      
+      for (const tabPanel of allTabPanels) {
+        if (tabPanel.contains(targetElement)) {
+          const tabValue = tabPanel.getAttribute('data-value');
+          const isInactive = tabPanel.getAttribute('inert') !== null;
+          
+          // Only switch tabs if the target is in an inactive tab
+          if (tabValue && isInactive) {
+            handleValueChange(tabValue);
+            // Scroll to the element after tab animation completes
+            setTimeout(() => {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400); // Wait for tab animation
+          }
+          break;
+        }
+      }
+    };
+
+    // Listen for hash changes (clicking TOC links)
+    window.addEventListener('hashchange', handleHashChange);
+    // Also check on mount in case we loaded with a hash
+    handleHashChange();
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [handleValueChange]);
+
   return (
     <TabsProvider
       value={{
@@ -276,13 +317,13 @@ function TabsContents({
     <motion.div
       ref={containerRef}
       data-slot="tabs-contents"
-      style={{ overflow: 'hidden' }}
+      style={{ overflow: 'clip' }}
       animate={{ height }}
       transition={transition}
       {...props}
     >
       <motion.div
-        className="flex -mx-2"
+        className="flex"
         animate={{ x: activeIndex * -100 + '%' }}
         transition={transition}
       >
@@ -292,7 +333,7 @@ function TabsContents({
             ref={(el) => {
               itemRefs.current[index] = el;
             }}
-            className="w-full shrink-0 px-2 h-full"
+            className="w-full shrink-0 h-full"
           >
             {child}
           </div>
@@ -324,8 +365,9 @@ function TabsContent({
     <Component
       role="tabpanel"
       data-slot="tabs-content"
+      data-value={value}
       inert={!isActive}
-      style={{ overflow: 'hidden', ...style }}
+      style={{ overflow: 'visible', ...style }}
       initial={{ filter: 'blur(0px)' }}
       animate={{ filter: isActive ? 'blur(0px)' : 'blur(4px)' }}
       exit={{ filter: 'blur(0px)' }}

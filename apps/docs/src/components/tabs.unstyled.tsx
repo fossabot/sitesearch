@@ -110,6 +110,47 @@ export function Tabs({
     }
   }, [valueToIdMap]);
 
+  // Handle navigation to anchors inside tabs
+  useLayoutEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1);
+      if (!hash || !tabsRef.current) return;
+
+      // Check if the hash target is inside one of the tab contents
+      const targetElement = document.getElementById(hash);
+      if (!targetElement) return;
+
+      // Find which tab contains this element
+      const tabsContainer = tabsRef.current;
+      const allTabContents = tabsContainer.querySelectorAll('[role="tabpanel"]');
+      
+      for (const tabContent of allTabContents) {
+        if (tabContent.contains(targetElement)) {
+          const tabValue = tabContent.getAttribute('data-value');
+          
+          // Only switch tabs if the target is in an inactive tab
+          if (tabValue && tabContent.getAttribute('data-state') === 'inactive') {
+            onChange(tabValue);
+            // Scroll to the element after tab animation completes
+            setTimeout(() => {
+              targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 350); // Wait for tab animation
+          }
+          break;
+        }
+      }
+    };
+
+    // Listen for hash changes (clicking TOC links)
+    window.addEventListener('hashchange', handleHashChange);
+    // Also check on mount in case we loaded with a hash
+    handleHashChange();
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [valueToIdMap, onChange]);
+
   return (
     <Primitive.Tabs
       ref={mergeRefs(ref, tabsRef)}
