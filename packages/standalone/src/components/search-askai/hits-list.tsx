@@ -12,12 +12,16 @@ interface HitsActionsProps {
   query: string;
   isSelected: boolean;
   onAskAI: () => void;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 const HitsActions = memo(function HitsActions({
   query,
   isSelected,
   onAskAI,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsActionsProps) {
   return (
     <div className="ss-infinite-hits-list">
@@ -29,6 +33,14 @@ const HitsActions = memo(function HitsActions({
         // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: hand crafted
         role="option"
         aria-selected={isSelected}
+        onMouseEnter={() => {
+          if (!hoverEnabled) return;
+          onHoverIndex?.(0);
+        }}
+        onMouseMove={() => {
+          if (!hoverEnabled) return;
+          onHoverIndex?.(0);
+        }}
       >
         <SparklesIcon />
         <p className="ss-infinite-hits-item-title">
@@ -45,6 +57,8 @@ interface HitsListProps {
   selectedIndex: number;
   onAskAI: () => void;
   attributes?: HitsAttributesMapping;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 export const HitsList = memo(function HitsList({
@@ -53,6 +67,8 @@ export const HitsList = memo(function HitsList({
   selectedIndex,
   onAskAI,
   attributes,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsListProps) {
   const mapping: Required<Pick<HitsAttributesMapping, "primaryText">> &
     Partial<HitsAttributesMapping> = useMemo(
@@ -69,6 +85,8 @@ export const HitsList = memo(function HitsList({
         query={query}
         isSelected={selectedIndex === 0}
         onAskAI={onAskAI}
+        onHoverIndex={onHoverIndex}
+        hoverEnabled={hoverEnabled}
       />
       {hits.map((hit: SearchHit, idx: number) => {
         const isSel = selectedIndex === idx + 1;
@@ -81,6 +99,14 @@ export const HitsList = memo(function HitsList({
             className="ss-infinite-hits-item ss-infinite-hits-anchor"
             role="option"
             aria-selected={isSel}
+            onMouseEnter={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx + 1);
+            }}
+            onMouseMove={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx + 1);
+            }}
           >
             <p className="ss-infinite-hits-item-title">
               <Highlight

@@ -105,18 +105,36 @@ interface ResultsPanelProps {
   selectedIndex: number;
   refine: (query: string) => void;
   config: SearchConfig;
+  onHoverIndex?: (index: number) => void;
+  scrollOnSelectionChange?: boolean;
 }
 
 const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
   query,
   selectedIndex,
   config,
+  onHoverIndex,
+  scrollOnSelectionChange = true,
 }) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverEnabled, setHoverEnabled] = useState(false);
+
+  // Enable hover selection only after the user moves the pointer inside the list
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    setHoverEnabled(false);
+    const enable = () => setHoverEnabled(true);
+    container.addEventListener("pointermove", enable, { once: true } as any);
+    return () => {
+      container.removeEventListener("pointermove", enable as any);
+    };
+  }, []);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
+    if (!scrollOnSelectionChange) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -133,7 +151,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, items.length]);
+  }, [selectedIndex, items.length, scrollOnSelectionChange]);
 
   return (
     <>
@@ -144,6 +162,8 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
           query={query}
           selectedIndex={selectedIndex}
           attributes={config.attributes}
+          onHoverIndex={onHoverIndex}
+          hoverEnabled={hoverEnabled}
         />
       </div>
     </>
@@ -163,8 +183,14 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const { items } = useHits();
 
   const noResults = results.results?.nbHits === 0;
-  const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(items, query);
+  const {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  } = useKeyboardNavigation(items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
     if (activateSelection()) {
@@ -200,6 +226,8 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             selectedIndex={selectedIndex}
             refine={refine}
             config={config}
+            onHoverIndex={hoverIndex}
+            scrollOnSelectionChange={selectionOrigin !== "pointer"}
           />
         )}
         {noResults && query && (

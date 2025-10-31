@@ -78,6 +78,8 @@ interface HitsListProps {
   selectedIndex: number;
   attributes?: HitsAttributesMapping;
   onItemClick?: () => void;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 const HitsList = memo(function HitsList({
@@ -85,6 +87,8 @@ const HitsList = memo(function HitsList({
   selectedIndex,
   attributes,
   onItemClick,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -118,9 +122,17 @@ const HitsList = memo(function HitsList({
             target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
             onClick={onItemClick}
-            className="flex flex-row items-center gap-3 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-3 hover:bg-accent aria-selected:bg-accent transition-colors"
+            className="flex flex-row items-center gap-3 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-3 aria-selected:bg-accent transition-colors"
             role="option"
             aria-selected={isSel}
+            onMouseEnter={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
+            onMouseMove={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
           >
             {hasImage ? (
               <div className="w-12 h-12 self-start flex-[0_0_48px] items-center justify-center overflow-hidden rounded-sm bg-muted">
@@ -241,6 +253,8 @@ interface DropdownContentProps {
   selectedIndex: number;
   config: DropdownSearchConfig;
   onItemClick?: () => void;
+  onHoverIndex?: (index: number) => void;
+  scrollOnSelectionChange?: boolean;
 }
 
 const DropdownContent = memo(function DropdownContent({
@@ -248,13 +262,30 @@ const DropdownContent = memo(function DropdownContent({
   selectedIndex,
   config,
   onItemClick,
+  onHoverIndex,
+  scrollOnSelectionChange = true,
 }: DropdownContentProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
   const noResults = items.length === 0;
+  const [hoverEnabled, setHoverEnabled] = useState(false);
+
+  // Enable hover selection only after the user moves the pointer inside the list
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    setHoverEnabled(false);
+    const enable = () => setHoverEnabled(true);
+    container.addEventListener("pointermove", enable, { once: true } as any);
+    return () => {
+      container.removeEventListener("pointermove", enable as any);
+    };
+  }, []);
 
   // Scroll selected item into view
+  // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
+    if (!scrollOnSelectionChange) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -271,7 +302,7 @@ const DropdownContent = memo(function DropdownContent({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, items.length]);
+  }, [selectedIndex, items.length, scrollOnSelectionChange]);
 
   const maxHeight = config.maxHeight || "300px";
 
@@ -296,6 +327,8 @@ const DropdownContent = memo(function DropdownContent({
         selectedIndex={selectedIndex}
         attributes={config.attributes}
         onItemClick={onItemClick}
+        onHoverIndex={onHoverIndex}
+        hoverEnabled={hoverEnabled}
       />
     </div>
   );
@@ -311,8 +344,14 @@ function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
   const { items } = useHits();
   const [open, setOpen] = useState(false);
 
-  const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(items, query);
+  const {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  } = useKeyboardNavigation(items, query);
 
   // Control popover open state based on query
   useEffect(() => {
@@ -366,6 +405,8 @@ function DropdownSearchInner({ config }: DropdownSearchInnerProps) {
                 selectedIndex={selectedIndex}
                 config={config}
                 onItemClick={handleItemClick}
+                onHoverIndex={hoverIndex}
+                scrollOnSelectionChange={selectionOrigin !== "pointer"}
               />
             ) : (
               <div className="p-4 text-center text-sm text-muted-foreground">

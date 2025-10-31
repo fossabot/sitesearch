@@ -13,12 +13,16 @@ interface HitsListProps {
   query: string;
   selectedIndex: number;
   attributes?: HitsAttributesMapping;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 export const HitsList = memo(function HitsList({
   hits,
   selectedIndex,
   attributes,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -55,6 +59,14 @@ export const HitsList = memo(function HitsList({
             className="ss-infinite-hits-item ss-infinite-hits-anchor"
             role="option"
             aria-selected={isSel}
+            onMouseEnter={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
+            onMouseMove={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
           >
             {imageUrl ? (
               <div className="ss-infinite-hits-item-image-container">

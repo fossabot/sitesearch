@@ -366,13 +366,6 @@
     transform var(--search-transition-duration) ease;
 }
 
-.ss-exp .ss-infinite-hits-item:hover {
-  background: var(--search-hover-color);
-  border-color: var(--search-border-color);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transform: var(--search-transform-hover);
-}
-
 .ss-exp .ss-infinite-hits-anchor:hover .ss-infinite-hits-item-title {
   color: var(--search-primary-color);
 }

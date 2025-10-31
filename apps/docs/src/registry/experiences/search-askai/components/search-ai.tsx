@@ -855,23 +855,35 @@ interface HitsActionsProps {
   query: string;
   isSelected: boolean;
   onAskAI: () => void;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 const HitsActions = memo(function HitsActions({
   query,
   isSelected,
   onAskAI,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsActionsProps) {
   return (
     <div className="list-none p-0 m-0 animate-in fade-in-0 slide-in-from-top-1">
       <article
         onClick={onAskAI}
-        className="my-1 p-3 rounded-lg bg-background flex items-center gap-4 cursor-pointer select-none whitespace-nowrap transition-all duration-150 hover:bg-accent hover:shadow-lg hover:-translate-y-px aria-selected:bg-accent aria-selected:shadow-lg aria-selected:-translate-y-px"
+        className="my-1 p-3 rounded-lg bg-background flex items-center gap-4 cursor-pointer select-none whitespace-nowrap transition-all duration-150 aria-selected:bg-accent aria-selected:shadow-lg aria-selected:-translate-y-px"
         aria-label="Ask AI"
         title="Ask AI"
         // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: hand crafted
         role="option"
         aria-selected={isSelected}
+        onMouseEnter={() => {
+          if (!hoverEnabled) return;
+          onHoverIndex?.(0);
+        }}
+        onMouseMove={() => {
+          if (!hoverEnabled) return;
+          onHoverIndex?.(0);
+        }}
       >
         <SparklesIcon strokeWidth={1.5} size={20} />
         <p className="text-base text-foreground m-0 font-normal">
@@ -891,6 +903,8 @@ interface HitsListProps {
   selectedIndex: number;
   onAskAI: () => void;
   attributes?: HitsAttributesMapping;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 const HitsList = memo(function HitsList({
@@ -899,6 +913,8 @@ const HitsList = memo(function HitsList({
   selectedIndex,
   onAskAI,
   attributes,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -922,6 +938,8 @@ const HitsList = memo(function HitsList({
         query={query}
         isSelected={selectedIndex === 0}
         onAskAI={onAskAI}
+        onHoverIndex={onHoverIndex}
+        hoverEnabled={hoverEnabled}
       />
       <p className="text-muted-foreground text-sm mt-4 mb-2">Results</p>
       {hits.map((hit: any, idx: number) => {
@@ -937,9 +955,17 @@ const HitsList = memo(function HitsList({
             href={url ?? "#"}
             target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
-            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block hover:bg-accent hover:border-border hover:shadow-lg hover:-translate-y-px aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
+            className={`my-1 p-4 rounded-lg bg-background gap-4 cursor-pointer no-underline text-foreground transition-all duration-150 block aria-selected:bg-accent aria-selected:border-border aria-selected:shadow-lg aria-selected:-translate-y-px animate-in fade-in-0 zoom-in-95 ${hasImage ? "flex flex-row items-center gap-4" : ""}`}
             role="option"
             aria-selected={isSel}
+            onMouseEnter={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx + 1);
+            }}
+            onMouseMove={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx + 1);
+            }}
           >
             {hasImage ? (
               <div className="w-[100px] h-[100px] self-start flex-[0_0_100px] items-center justify-center overflow-hidden rounded-sm bg-muted">
@@ -1223,6 +1249,8 @@ interface ResultsPanelProps {
   error: Error | null;
   isGenerating: boolean;
   sendMessage: (options: { text: string }) => void | Promise<void>;
+  onHoverIndex?: (index: number) => void;
+  scrollOnSelectionChange?: boolean;
 }
 
 const ResultsPanel = memo(function ResultsPanel({
@@ -1237,13 +1265,29 @@ const ResultsPanel = memo(function ResultsPanel({
   error,
   isGenerating,
   sendMessage,
+  onHoverIndex,
+  scrollOnSelectionChange = true,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverEnabled, setHoverEnabled] = useState(false);
+
+  // Enable hover selection only after the user moves the pointer inside the list
+  useEffect(() => {
+    if (showChat) return;
+    const container = containerRef.current;
+    if (!container) return;
+    setHoverEnabled(false);
+    const enable = () => setHoverEnabled(true);
+    container.addEventListener("pointermove", enable, { once: true } as any);
+    return () => {
+      container.removeEventListener("pointermove", enable as any);
+    };
+  }, [showChat]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
-    if (showChat) return;
+    if (showChat || !scrollOnSelectionChange) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -1260,7 +1304,7 @@ const ResultsPanel = memo(function ResultsPanel({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, showChat, items.length]);
+  }, [selectedIndex, showChat, items.length, scrollOnSelectionChange]);
 
   const lastSentRef = useRef<string | null>(null);
   useEffect(() => {
@@ -1302,6 +1346,8 @@ const ResultsPanel = memo(function ResultsPanel({
           selectedIndex={selectedIndex}
           onAskAI={() => setShowChat(true)}
           attributes={config.attributes}
+          onHoverIndex={onHoverIndex}
+          hoverEnabled={hoverEnabled}
         />
       </div>
     </>
@@ -1449,8 +1495,14 @@ function SearchModal({ onClose, config }: SearchModalProps) {
   });
 
   const noResults = results.results?.nbHits === 0;
-  const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(showChat, items, query);
+  const {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  } = useKeyboardNavigation(showChat, items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
     if (activateSelection()) {
@@ -1503,6 +1555,8 @@ function SearchModal({ onClose, config }: SearchModalProps) {
             error={error as Error | null}
             isGenerating={isGenerating}
             sendMessage={sendMessage}
+            onHoverIndex={hoverIndex}
+            scrollOnSelectionChange={selectionOrigin !== "pointer"}
           />
         )}
         {noResults && query && !showChat && (

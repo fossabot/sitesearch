@@ -141,6 +141,8 @@ interface ResultsPanelProps {
   error: Error | null;
   isGenerating: boolean;
   sendMessage: (options: { text: string }) => void | Promise<void>;
+  onHoverIndex?: (index: number) => void;
+  scrollOnSelectionChange?: boolean;
 }
 
 const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
@@ -155,13 +157,29 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
   error,
   isGenerating,
   sendMessage,
+  onHoverIndex,
+  scrollOnSelectionChange = true,
 }) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverEnabled, setHoverEnabled] = useState(false);
+
+  // Enable hover selection only after the user moves the pointer inside the list
+  useEffect(() => {
+    if (showChat) return;
+    const container = containerRef.current;
+    if (!container) return;
+    setHoverEnabled(false);
+    const enable = () => setHoverEnabled(true);
+    container.addEventListener("pointermove", enable, { once: true } as any);
+    return () => {
+      container.removeEventListener("pointermove", enable as any);
+    };
+  }, [showChat]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
-    if (showChat) return;
+    if (showChat || !scrollOnSelectionChange) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -178,7 +196,7 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, showChat, items.length]);
+  }, [selectedIndex, showChat, items.length, scrollOnSelectionChange]);
 
   const lastSentRef = useRef<string | null>(null);
   useEffect(() => {
@@ -217,6 +235,8 @@ const ResultsPanel: FC<ResultsPanelProps> = memo(function ResultsPanel({
           selectedIndex={selectedIndex}
           onAskAI={() => setShowChat(true)}
           attributes={config.attributes}
+          onHoverIndex={onHoverIndex}
+          hoverEnabled={hoverEnabled}
         />
       </div>
     </>
@@ -246,8 +266,14 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   });
 
   const noResults = results.results?.nbHits === 0;
-  const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(showChat, items, query);
+  const {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  } = useKeyboardNavigation(showChat, items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
     if (activateSelection()) {
@@ -305,6 +331,8 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             error={error as Error | null}
             isGenerating={isGenerating}
             sendMessage={sendMessage}
+            onHoverIndex={hoverIndex}
+            scrollOnSelectionChange={selectionOrigin !== "pointer"}
           />
         )}
         {noResults && query && !showChat && (

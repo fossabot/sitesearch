@@ -207,12 +207,16 @@ interface HitsListProps {
   query: string;
   selectedIndex: number;
   attributes?: HitsAttributesMapping;
+  onHoverIndex?: (index: number) => void;
+  hoverEnabled?: boolean;
 }
 
 const HitsList = memo(function HitsList({
   hits,
   selectedIndex,
   attributes,
+  onHoverIndex,
+  hoverEnabled,
 }: HitsListProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const mapping = useMemo(
@@ -245,9 +249,17 @@ const HitsList = memo(function HitsList({
             href={url ?? "#"}
             target={url ? "_blank" : undefined}
             rel="noopener noreferrer"
-            className="flex flex-row items-center gap-4 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-4 hover:bg-blue-50 aria-selected:bg-blue-50 dark:hover:bg-slate-900 dark:aria-selected:bg-slate-900 animate-in fade-in-0 zoom-in-95"
+            className="flex flex-row items-center gap-4 cursor-pointer text-decoration-none text-foreground bg-background rounded-sm p-4 aria-selected:bg-blue-50 dark:aria-selected:bg-slate-900 animate-in fade-in-0 zoom-in-95"
             role="option"
             aria-selected={isSel}
+            onMouseEnter={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
+            onMouseMove={() => {
+              if (!hoverEnabled) return;
+              onHoverIndex?.(idx);
+            }}
           >
             {hasImage ? (
               <div className="w-[100px] h-[100px] self-start flex-[0_0_100px] items-center justify-center overflow-hidden rounded-sm bg-muted">
@@ -476,18 +488,24 @@ interface ResultsPanelProps {
   selectedIndex: number;
   refine: (query: string) => void;
   config: SearchConfig;
+  onHoverIndex?: (index: number) => void;
+  scrollOnSelectionChange?: boolean;
 }
 
 const ResultsPanel = memo(function ResultsPanel({
   query,
   selectedIndex,
   config,
+  onHoverIndex,
+  scrollOnSelectionChange = true,
 }: ResultsPanelProps) {
   const { items } = useHits();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverEnabled, setHoverEnabled] = useState(false);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
+    if (!scrollOnSelectionChange) return;
     const container = containerRef.current;
     if (!container) return;
     const selectedEl = container.querySelector(
@@ -504,7 +522,19 @@ const ResultsPanel = memo(function ResultsPanel({
     } else if (iRect.bottom > cRect.bottom - padding) {
       container.scrollTop += iRect.bottom - (cRect.bottom - padding);
     }
-  }, [selectedIndex, items.length]);
+  }, [selectedIndex, items.length, scrollOnSelectionChange]);
+
+  // Enable hover selection only after the user moves the pointer inside the list
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    setHoverEnabled(false);
+    const enable = () => setHoverEnabled(true);
+    container.addEventListener("pointermove", enable, { once: true } as any);
+    return () => {
+      container.removeEventListener("pointermove", enable as any);
+    };
+  }, []);
 
   return (
     <>
@@ -518,6 +548,8 @@ const ResultsPanel = memo(function ResultsPanel({
           query={query}
           selectedIndex={selectedIndex}
           attributes={config.attributes}
+          onHoverIndex={onHoverIndex}
+          hoverEnabled={hoverEnabled}
         />
       </div>
     </>
@@ -537,8 +569,14 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const { items } = useHits();
 
   const noResults = results.results?.nbHits === 0;
-  const { selectedIndex, moveDown, moveUp, activateSelection } =
-    useKeyboardNavigation(items, query);
+  const {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  } = useKeyboardNavigation(items, query);
 
   const handleActivateSelection = useCallback((): boolean => {
     if (activateSelection()) {
@@ -571,6 +609,8 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
             selectedIndex={selectedIndex}
             refine={refine}
             config={config}
+            onHoverIndex={hoverIndex}
+            scrollOnSelectionChange={selectionOrigin !== "pointer"}
           />
         )}
         {noResults && query && (

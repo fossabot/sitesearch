@@ -5,23 +5,39 @@ interface UseKeyboardNavigationReturn {
   moveDown: () => void;
   moveUp: () => void;
   activateSelection: () => boolean;
+  hoverIndex: (index: number) => void;
+  selectionOrigin: "keyboard" | "pointer" | "init";
 }
 
 export function useKeyboardNavigation(
   hits: any[],
   query: string,
 ): UseKeyboardNavigationReturn {
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectionOrigin, setSelectionOrigin] = useState<
+    "keyboard" | "pointer" | "init"
+  >("init");
 
   const totalItems = useMemo(() => hits.length, [hits.length]);
 
   const moveDown = useCallback(() => {
     setSelectedIndex((prev) => (prev + 1) % totalItems);
+    setSelectionOrigin("keyboard");
   }, [totalItems]);
 
   const moveUp = useCallback(() => {
     setSelectedIndex((prev) => (prev - 1 + totalItems) % totalItems);
+    setSelectionOrigin("keyboard");
   }, [totalItems]);
+
+  const hoverIndex = useCallback(
+    (index: number) => {
+      if (index < 0 || index >= totalItems) return;
+      setSelectedIndex(index);
+      setSelectionOrigin("pointer");
+    },
+    [totalItems],
+  );
 
   const activateSelection = useCallback((): boolean => {
     const hit = hits[selectedIndex];
@@ -34,8 +50,16 @@ export function useKeyboardNavigation(
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
-    setSelectedIndex(-1);
+    setSelectedIndex(0);
+    setSelectionOrigin("init");
   }, [query]);
 
-  return { selectedIndex, moveDown, moveUp, activateSelection };
+  return {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  };
 }

@@ -5,6 +5,8 @@ interface UseKeyboardNavigationReturn {
   moveDown: () => void;
   moveUp: () => void;
   activateSelection: () => boolean;
+  hoverIndex: (index: number) => void;
+  selectionOrigin: "keyboard" | "pointer" | "init";
 }
 
 export function useKeyboardNavigation(
@@ -12,19 +14,33 @@ export function useKeyboardNavigation(
   hits: any[],
   query: string,
 ): UseKeyboardNavigationReturn {
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectionOrigin, setSelectionOrigin] = useState<
+    "keyboard" | "pointer" | "init"
+  >("init");
 
   const totalItems = useMemo(() => hits.length + 1, [hits.length]); // +1 for Ask AI
 
   const moveDown = useCallback(() => {
     if (showChat || totalItems === 0) return;
     setSelectedIndex((prev) => (prev + 1) % totalItems);
+    setSelectionOrigin("keyboard");
   }, [showChat, totalItems]);
 
   const moveUp = useCallback(() => {
     if (showChat || totalItems === 0) return;
     setSelectedIndex((prev) => (prev - 1 + totalItems) % totalItems);
+    setSelectionOrigin("keyboard");
   }, [showChat, totalItems]);
+
+  const hoverIndex = useCallback(
+    (index: number) => {
+      if (showChat || index < 0 || index >= totalItems) return;
+      setSelectedIndex(index);
+      setSelectionOrigin("pointer");
+    },
+    [showChat, totalItems],
+  );
 
   const activateSelection = useCallback((): boolean => {
     if (showChat) return false;
@@ -43,8 +59,16 @@ export function useKeyboardNavigation(
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: expected
   useEffect(() => {
-    setSelectedIndex(-1);
+    setSelectedIndex(0);
+    setSelectionOrigin("init");
   }, [query, showChat]);
 
-  return { selectedIndex, moveDown, moveUp, activateSelection };
+  return {
+    selectedIndex,
+    moveDown,
+    moveUp,
+    activateSelection,
+    hoverIndex,
+    selectionOrigin,
+  };
 }
