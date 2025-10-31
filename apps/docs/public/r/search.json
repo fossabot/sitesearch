@@ -7,7 +7,8 @@
   "dependencies": [
     "algoliasearch@^5",
     "react-instantsearch@^7.16.2",
-    "lucide-react"
+    "lucide-react",
+    "tw-animate-css"
   ],
   "devDependencies": ["tw-animate-css"],
   "registryDependencies": ["button"],
