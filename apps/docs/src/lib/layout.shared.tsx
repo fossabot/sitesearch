@@ -44,7 +44,7 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         text: "Playground",
-        url: "https://community.algolia.com/sitesearch-playground",
+        url: "https://community.algolia.com/docsearch-playground/?ss=true",
         external: true,
       },
     ],
