@@ -37,6 +37,16 @@ export function baseOptions(): BaseLayoutProps {
     },
     githubUrl: "https://github.com/algolia/sitesearch",
     // see https://fumadocs.dev/docs/ui/navigation/links
-    links: [],
+    links: [
+      {
+        text: "Documentation",
+        url: "/docs",
+      },
+      {
+        text: "Playground",
+        url: "https://community.algolia.com/sitesearch-playground",
+        external: true,
+      },
+    ],
   };
 }
