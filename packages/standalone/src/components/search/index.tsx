@@ -183,6 +183,17 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const results = useInstantSearch();
   const { items, sendEvent } = useHits();
 
+  // Focus input when modal opens
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure the modal is fully rendered
+    const rafId = requestAnimationFrame(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
   const noResults = results.results?.nbHits === 0;
   const {
     selectedIndex,

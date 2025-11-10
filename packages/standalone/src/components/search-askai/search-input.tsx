@@ -155,8 +155,6 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
             }
           }
         }}
-        // biome-ignore lint/a11y/noAutofocus: expected
-        autoFocus
       />
       <div className="ss-search-action-buttons-container">
         <button

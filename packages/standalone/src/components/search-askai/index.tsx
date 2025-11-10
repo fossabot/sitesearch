@@ -258,6 +258,17 @@ export function SearchModal({ onClose, config }: SearchModalProps) {
   const { items, sendEvent } = useHits();
   const { showChat, setShowChat, handleShowChat } = useSearchState();
 
+  // Focus input when modal opens
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure the modal is fully rendered
+    const rafId = requestAnimationFrame(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
   // Lift chat state here to thread isGenerating to the SearchInput
   const { messages, error, isGenerating, sendMessage } = useAskai({
     applicationId: config.applicationId,

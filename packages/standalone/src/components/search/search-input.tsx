@@ -80,8 +80,6 @@ export const SearchInput = memo(function SearchInput(props: SearchInputProps) {
             props.onEnter?.();
           }
         }}
-        // biome-ignore lint/a11y/noAutofocus: expected
-        autoFocus
       />
       <div className="ss-search-action-buttons-container">
         <button
