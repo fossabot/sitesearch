@@ -12,6 +12,22 @@ export interface AskAIConfig {
   assistantId: string;
 }
 
+/**
+ * Checks if an error is a thread depth error (AI-217)
+ * Thread depth errors occur when a conversation has reached its maximum depth limit
+ */
+export function isThreadDepthError(error?: Error | null): boolean {
+  if (!error) return false;
+
+  // Check if error has a code property
+  const errorWithCode = error as Error & { code?: string };
+  if (errorWithCode.code === 'AI-217') return true;
+
+  // Check message content for AI-217 or thread depth references
+  const message = error.message?.toLowerCase() || '';
+  return message.includes('ai-217') || message.includes('thread depth');
+}
+
 export function useAskai(config: AskAIConfig) {
   if (!config) {
     throw new Error("config is required for useAskai");
@@ -52,9 +68,15 @@ export function useAskai(config: AskAIConfig) {
   const isGenerating =
     chat.status === "submitted" || chat.status === "streaming";
 
+  // Check if there's a thread depth error (AI-217)
+  const hasThreadDepthError = useMemo(() => {
+    return chat.status === 'error' && isThreadDepthError(chat.error as Error | null);
+  }, [chat.status, chat.error]);
+
   return {
     ...chat,
     isGenerating,
+    hasThreadDepthError,
   };
 }
 
