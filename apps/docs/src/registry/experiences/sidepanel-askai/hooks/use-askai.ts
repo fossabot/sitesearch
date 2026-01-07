@@ -60,9 +60,6 @@ export function useAskai(config: AskAIConfig) {
   const chat = useChat({
     transport,
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    async onToolCall({ toolCall }) {
-      if (toolCall.dynamic) return;
-    },
   });
 
   const isGenerating =
