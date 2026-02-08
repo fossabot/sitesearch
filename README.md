@@ -37,7 +37,11 @@ Feel free to tweak SiteSearch to your convenience!
 3. Submit a PR
 
 Or start from our provisioned CodeSandBox container – [![CodeSandbox](https://img.shields.io/badge/Codesandbox-040404?style=for-the-badge&logo=codesandbox&logoColor=DBDBDB)](https://codesandbox.io/p/github/algolia/sitesearch)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Falialobidm%2Fsitesearch.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Falialobidm%2Fsitesearch?ref=badge_shield)
 
 ## License
 
 MIT License - see LICENSE.md file for details.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Falialobidm%2Fsitesearch.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Falialobidm%2Fsitesearch?ref=badge_large)
